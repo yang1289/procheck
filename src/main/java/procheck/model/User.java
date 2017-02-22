@@ -1,0 +1,121 @@
+package procheck.model;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
+
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import procheck.util.constants;
+@Entity
+@Table(name="pro_user")
+public class User implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue
+	private int id;
+	
+	@Column(unique=true,nullable=false)
+	private String username;
+	
+	@Column(nullable=false)
+	@JsonIgnore
+	private String password;
+	
+	@Column(nullable=false)
+	@JsonFormat(pattern=constants.DATETIME_FORMAT)
+	private Date registTime;
+	
+	private String email;
+	
+	private String url;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(
+				name="pro_user_role",
+				joinColumns={@JoinColumn(name="user_id")},
+				inverseJoinColumns={@JoinColumn(name="role_Id")}
+			)
+	@JsonIgnore
+	private Set<Role> roles=new HashSet<>();
+
+	public User(){
+		
+	}
+	
+	public User(String username, String password, Date registTime) {
+		
+		this.username = username;
+		this.password = password;
+		this.registTime = registTime;
+		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Date getRegistTime() {
+		return registTime;
+	}
+
+	public void setRegistTime(Date registTime) {
+		this.registTime = registTime;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	
+}
