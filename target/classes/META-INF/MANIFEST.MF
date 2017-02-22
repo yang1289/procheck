@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Implementation-Title: procheck
 Implementation-Version: 0.1
-Built-By: yangqiang
+Built-By: Administrator
 Implementation-Vendor-Id: com.procheck
 Build-Jdk: 1.8.0_121
 Implementation-URL: http://projects.spring.io/spring-boot/procheck/
