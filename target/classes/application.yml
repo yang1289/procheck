@@ -1,0 +1,14 @@
+spring:
+  freemarker:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost/procheck?useSSL=false&characterEncoding=utf8
+    username: root
+    password: yq199410
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  mvc:
+    static-path-pattern: /static/**
