@@ -4,7 +4,7 @@
 	<#include "../common/left_menu.ftl"/>
  	<@left_menu/>
 	<div id="content" class="col-lg-10 col-sm-10">
-	!-- content starts -->
+	<!-- content starts -->
     	<div>
 		    <ul class="breadcrumb">
 		        <li>
