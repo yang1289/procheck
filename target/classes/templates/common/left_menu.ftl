@@ -10,17 +10,40 @@
                         <li class="nav-header">导航栏</li>
                         <li><a class="" href="/index"><i class="glyphicon glyphicon-home"></i><span>个人主页</span></a>
                         </li>
-                        <#if _roles?seq_contains("proapply:apply")>
+
+                        <#if _roles?seq_contains("setApplyTime:set")>
+                            <li><a class="" href="#"><i class="glyphicon glyphicon-list-alt"></i><span>申请日期设定</span></a>
+                            </li>
+                        </#if>
+
+                        <#if _roles?seq_contains("startManage:initialization")>
+                            <li><a class="" href="#"><i class="glyphicon glyphicon-list-alt"></i><span>初始化设置</span></a>
+                            </li>
+                        </#if>
+
+                        <#if _roles?seq_contains("project:apply")>
                         	<li class="accordion">
-	                            <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目申请 </span></a>
+	                            <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目 </span></a>
 	                            <ul class="nav nav-pills nav-stacked">
 	                            	<#list permissions as permission>
-	                            		<#if permission.name?contains("proapply")>
-	                            			<li><a href="#"> ${permission.description}</a></li>
+	                            		<#if permission.name?contains("project")>
+	                            			<li><a href="${permission.url}"> ${permission.description}</a></li>
 	                            		</#if>
-	                            	</#list>  
+	                            	</#list>
 	                            </ul>
                         	</li>
+                        </#if>
+                        <#if _roles?seq_contains("project:list")>
+                            <li class="accordion">
+                                <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目 </span></a>
+                                <ul class="nav nav-pills nav-stacked">
+                                    <#list permissions as permission>
+                                        <#if permission.name?contains("project")>
+                                            <li><a href="${permission.url}"> ${permission.description}</a></li>
+                                        </#if>
+                                    </#list>
+                                </ul>
+                            </li>
                         </#if>
                        <#if _roles?seq_contains("proprocess:process")>
                         <li class="accordion">
@@ -34,15 +57,7 @@
                             </ul>
                         </li>
                       </#if>
-                      <#if _roles?seq_contains("setApplyTime:set")>
-                       	 <li><a class="" href="#"><i class="glyphicon glyphicon-list-alt"></i><span>申请日期设定</span></a>
-                        </li>
-                      </#if>
-                      
-                      <#if _roles?seq_contains("startManage:initialization")>
-                       	 <li><a class="" href="#"><i class="glyphicon glyphicon-list-alt"></i><span>初始化设置</span></a>
-                        </li>
-                      </#if>
+
                       
                        <#if _roles?seq_contains("user:list")>
                         <li class="accordion">
@@ -56,7 +71,7 @@
                             </ul>
                         </li>
                       </#if>
-                      
+
                       <#if _roles?seq_contains("permission:list")>
                        	 <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 权限 </span></a>

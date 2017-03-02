@@ -10,6 +10,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.1.RELEASE</version>
+
 	</parent>
 
 
@@ -17,6 +18,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+        <!--ueditor 依赖文件版本信息-->
+        <version.commons-codec>1.10</version.commons-codec>
+        <version.commons-io>2.5</version.commons-io>
+        <version.commons-fileupload>1.3.2</version.commons-fileupload>
+        <version.json>20160212</version.json>
+        <version.servlet-api>3.1.0</version.servlet-api>
 	</properties>
 
 	<dependencies>
@@ -61,6 +68,27 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!--ueditor 依赖文件-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${version.commons-codec}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${version.commons-fileupload}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${version.json}</version>
+        </dependency>
+
+
+
+
 	</dependencies>
 	<build>
 		<plugins>

@@ -64,6 +64,34 @@ public class PermissionController {
 		}
 		return null;
 	}
+
+	@GetMapping("/edit")
+	public String editingPermission(@RequestParam int id, Model model){
+		model.addAttribute("editpermission",permissionService.findById(id));
+		model.addAttribute("prePermissions",permissionService.findByPid(0));
+		return "/permission/permissionEdit";
+	}
+	@PostMapping("/edit")
+	public String editedPermission(@RequestParam int id,String description,String name,boolean isParent,Integer prePermission,String url,HttpServletResponse response){
+
+		Permission permission=permissionService.findById(id);
+		permission.setDescription(description);
+		permission.setName(name);
+		if(!isParent){
+			permission.setPid(prePermission);
+			permission.setUrl(url);
+		}
+
+		permissionService.save(permission);
+
+
+		try {
+			response.sendRedirect("/permission/list");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	@GetMapping("/delete")
 	public String deleteById(@RequestParam int id,HttpServletResponse response){
