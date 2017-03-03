@@ -1,4 +1,8 @@
 spring:
+  http:
+    multipart:
+      max-request-size: 100Mb
+      max-file-size: 20Mb
   freemarker:
     cache: false
   datasource:
