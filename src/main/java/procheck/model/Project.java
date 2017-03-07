@@ -1,6 +1,11 @@
 package procheck.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.security.core.Authentication;
+import procheck.util.constants;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,8 +29,109 @@ public class Project implements Serializable {
     private boolean academyIsCheck;
     private String collegeAdvice;
     private boolean collegeIsCheck;
-    private boolean isPublish;
+    private boolean published;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = constants.DATETIME_FORMAT)
     private Date createTime;
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectInfo() {
+        return projectInfo;
+    }
+
+    public void setProjectInfo(String projectInfo) {
+        this.projectInfo = projectInfo;
+    }
+
+    public String getAdviserAdvice() {
+        return adviserAdvice;
+    }
+
+    public void setAdviserAdvice(String adviserAdvice) {
+        this.adviserAdvice = adviserAdvice;
+    }
+
+    public boolean isAdviserIsCheck() {
+        return adviserIsCheck;
+    }
+
+    public void setAdviserIsCheck(boolean adviserIsCheck) {
+        this.adviserIsCheck = adviserIsCheck;
+    }
+
+    public String getAcademyAdvice() {
+        return academyAdvice;
+    }
+
+    public void setAcademyAdvice(String academyAdvice) {
+        this.academyAdvice = academyAdvice;
+    }
+
+    public boolean isAcademyIsCheck() {
+        return academyIsCheck;
+    }
+
+    public void setAcademyIsCheck(boolean academyIsCheck) {
+        this.academyIsCheck = academyIsCheck;
+    }
+
+    public String getCollegeAdvice() {
+        return collegeAdvice;
+    }
+
+    public void setCollegeAdvice(String collegeAdvice) {
+        this.collegeAdvice = collegeAdvice;
+    }
+
+    public boolean isCollegeIsCheck() {
+        return collegeIsCheck;
+    }
+
+    public void setCollegeIsCheck(boolean collegeIsCheck) {
+        this.collegeIsCheck = collegeIsCheck;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+
+        this.createTime = createTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

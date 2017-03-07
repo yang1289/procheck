@@ -4,15 +4,6 @@
 	<#include "../common/left_menu.ftl"/>
  	<@left_menu/>
 	<div id="content" class="col-lg-10 col-sm-10">
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-	<!-- content starts -->
-=======
-	!-- content starts -->
->>>>>>> 91d01e69b4887373eca62e4080cfcc518a9e185c
->>>>>>> 89f3e86130d41fabf78ef7c7c072c118d31c0bc3
     	<div>
 		    <ul class="breadcrumb">
 		        <li>

@@ -49,6 +49,9 @@ public class User implements Serializable{
 	@JsonIgnore
 	private Set<Role> roles=new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+	private Set<Project> projects=new HashSet<>();
+
 	public User(){
 		
 	}
@@ -117,5 +120,11 @@ public class User implements Serializable{
 		this.roles = roles;
 	}
 
-	
+	public Set<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(Set<Project> projects) {
+		this.projects = projects;
+	}
 }

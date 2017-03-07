@@ -27,27 +27,18 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <div class="form-group">
                                 <label for="name">项目名称</label>
-                                <input type="text" class="form-control" id="name" value=""/>
+                                <input type="text" class="form-control" name="projectname" id="projectname" value=""/>
                             </div>
                             <div class="form-group">
                                 <label form="role">项目详情</label>
                                 <div>
-                                    <script id="container" name="content" type="text/plain">
+                                    <script id="container" name="content"  type="text/plain">
                                     </script>
                                     <!-- 配置文件 -->
                                     <script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
                                     <!-- 编辑器源码文件 -->
                                     <script type="text/javascript" src="/static/js/ueditor/ueditor.all.js"></script>
-                                    <script type="text/javascript">
-                                        var ue = UE.getEditor('container',{
-                                            initialFrameHeight:500
-                                        });
-                                        ue.ready(function(){
-                                            ue.execCommand("serverparam",{
-                                                 "${_csrf.parameterName}":"${_csrf.token}"
-                                            })
-                                        });
-                                    </script>
+
                                 </div>
 
                             </div>
@@ -74,25 +65,31 @@
                             </div>
 
                             <script type="text/javascript">
-
+                                var ue = UE.getEditor('container',{
+                                    initialFrameHeight:500
+                                });
+                                ue.ready(function(){
+                                    ue.execCommand("serverparam",{
+                                        "${_csrf.parameterName}":"${_csrf.token}"
+                                    })
+                                });
                                 function clickmodal(){
-                                    var username=$("#name").val();
-                                    var roleId=$(".roleIds:checked").val();
-                                    var rolename=$("#label_"+roleId).html();
+                                    var projectname=$("#projectname").val();
+                                    var content=ue.getContent();
                                     var em=0;
                                     var form=$("form");
                                     var error=$("#error");
 
-                                    if(username.length==0){
+                                    if(projectname.length==0){
                                         em++;
-                                        error.html('<div class="alert alert-info" role="alert">用户名不能为空</div>');
+                                        error.html('<div class="alert alert-info" role="alert">项目名称不能为空</div>');
                                     }
-                                    if(roleId==null){
+                                    if(content.length==0){
                                         em++;
-                                        error.html('<div class="alert alert-info" role="alert">角色配置不能为空</div>');
+                                        error.html('<div class="alert alert-info" role="alert">项目介绍不能为空</div>');
                                     }
                                     if(em==0){
-                                        $("#alert").html("是否保存用户："+username+" 角色："+rolename);
+                                        $("#alert").html("是否保存项目："+projectname);
                                         $("#save_modal").modal('show');
                                     }else{
                                         $("#save_modal").modal('hide');

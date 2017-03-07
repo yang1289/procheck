@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import procheck.model.Project;
 import procheck.model.Role;
 import procheck.model.User;
 import procheck.service.RoleService;
@@ -49,7 +50,8 @@ public class UserController {
 
 		return "/user/roleedit";
 	}
-	
+
+
 	@PostMapping("/role/edit")
 	public String roleEdited(@RequestParam int id,int roleId,HttpServletResponse response){
 		
