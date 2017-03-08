@@ -27,7 +27,9 @@ public class User implements Serializable{
 	
 	@Column(unique=true,nullable=false)
 	private String username;
-	
+
+	private String chineseName;
+
 	@Column(nullable=false)
 	@JsonIgnore
 	private String password;
@@ -40,7 +42,7 @@ public class User implements Serializable{
 	
 	private String url;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(
 				name="pro_user_role",
 				joinColumns={@JoinColumn(name="user_id")},
@@ -51,6 +53,10 @@ public class User implements Serializable{
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
 	private Set<Project> projects=new HashSet<>();
+
+	@ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.LAZY)
+	@JoinColumn(name = "academy_id")
+	private Academy academy;
 
 	public User(){
 		
@@ -126,5 +132,21 @@ public class User implements Serializable{
 
 	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
+	}
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
+	}
+
+	public Academy getAcademy() {
+		return academy;
+	}
+
+	public void setAcademy(Academy academy) {
+		this.academy = academy;
 	}
 }

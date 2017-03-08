@@ -27,7 +27,7 @@ public class Permission implements Serializable {
 
 	private String url;
 
-	@ManyToMany(mappedBy = "permissions")
+	@ManyToMany(mappedBy = "permissions",fetch = FetchType.LAZY)
 	private Set<Role> roles = new HashSet<Role>();
 
 	public int getId() {

@@ -19,7 +19,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="/${_principal}/profile">个人资料</a></li>
+                    <li><a href="/user/profile?name=${_principal!}">个人资料</a></li>
                     <li class="divider"></li>
                     <li><a href="/logout">登出</a></li>
                 </ul>

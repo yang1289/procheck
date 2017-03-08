@@ -58,7 +58,18 @@
                             </ul>
                         </li>
                       </#if>
-
+                        <#if _roles?seq_contains("academy:list")>
+                            <li class="accordion">
+                                <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 学院管理 </span></a>
+                                <ul class="nav nav-pills nav-stacked">
+                                    <#list permissions as permission>
+                                        <#if permission.name?contains("academy")>
+                                            <li><a href="${permission.url!}"> ${permission.description}</a></li>
+                                        </#if>
+                                    </#list>
+                                </ul>
+                            </li>
+                        </#if>
                       <#if _roles?seq_contains("permission:list")>
                        	 <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 权限 </span></a>
