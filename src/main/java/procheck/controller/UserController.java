@@ -17,9 +17,7 @@ import procheck.model.Academy;
 import procheck.model.Project;
 import procheck.model.Role;
 import procheck.model.User;
-import procheck.service.AcademyService;
-import procheck.service.RoleService;
-import procheck.service.UserService;
+import procheck.service.*;
 
 @Controller
 @RequestMapping("/user")
@@ -32,6 +30,11 @@ public class UserController {
 	
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private MajorService majorService;
+	@Autowired
+	private GradeService gradeService;
 
 	@GetMapping("/list")
 	public String findAllUser(Model model){
@@ -77,30 +80,29 @@ public class UserController {
 	@GetMapping("/profile")
 	public String profileing(@RequestParam String name,Model model){
 		User user =userService.findUserByUsername(name);
-		Integer academyid=user.getAcademyId();
-		Integer majorid=user.getMajorId();
-		Integer classid=user.getClassId();
-		Map<String,Academy> map=new HashMap<>();
-		Map<String,List<Academy>> limp=new HashMap<>();
-		if(academyid!=null){
+		Map map=new HashMap<>();
+		Map limp=new HashMap<>();
+		if(user.getAcademy()!=null){
+			Integer academyid=user.getAcademy().getId();
 			map.put("rootacademy",academyService.findById(academyid));
-			limp.put("rootacademylist",academyService.findByPid(0));
-
-			if(majorid!=null){
-				limp.put("majorlist",academyService.findByPid(academyService.findById(majorid).getPid()));
-				map.put("major",academyService.findById(majorid));
-				if(classid!=null){
-					limp.put("classlist",academyService.findByPid(academyService.findById(classid).getPid()));
-					map.put("classname",academyService.findById(classid));
+			limp.put("rootacademylist",academyService.findAll());
+			if(user.getMajor()!=null){
+				Integer majorid=user.getMajor().getId();
+				limp.put("majorlist",academyService.findById(academyid).getMajors());
+				map.put("major",majorService.findByid(majorid));
+				if(user.getGrade()!=null){
+					Integer gradeid=user.getGrade().getId();
+					limp.put("classlist",majorService.findByid(majorid).getGrades());
+					map.put("classname",gradeService.findById(gradeid));
 				}else{
-					limp.put("classlist",academyService.findByPid(majorid));
+					limp.put("classlist",gradeService.findByMajorId(majorid));
 				}
 			}else{
-				limp.put("majorlist",academyService.findByPid(academyid));
+				limp.put("majorlist",academyService.findById(academyid).getMajors());
 			}
 
 		}else{
-			limp.put("rootacademylist",academyService.findByPid(0));
+			limp.put("rootacademylist",academyService.findAll());
 		}
 		model.addAttribute("user",user);
 		model.addAttribute("academymaplist",limp);
@@ -111,9 +113,23 @@ public class UserController {
 	@PostMapping("/profile")
 	public String profiled(String username,String chinesename,String email,String url,Integer academyId,Integer majorId,Integer classId,HttpServletResponse response){
 		User user=userService.findUserByUsername(username);
-		user.setClassId(classId);
-		user.setMajorId(majorId);
-		user.setAcademyId(academyId);
+		if(academyId!=null){
+			user.setAcademy(academyService.findById(academyId));
+		}else{
+			user.setAcademy(null);
+		}
+		if(majorId!=null){
+			user.setMajor(majorService.findByid(majorId));
+		}else{
+			user.setMajor(null);
+		}
+
+		if(classId!=null){
+			user.setGrade(gradeService.findById(classId));
+		}else{
+			user.setGrade(null);
+		}
+
 		if(chinesename!=null){
 			user.setChineseName(chinesename);
 		}
@@ -124,7 +140,7 @@ public class UserController {
 			user.setUrl(url);
 		}
 		System.out.println("chineseName:====="+user.getChineseName());
-		System.out.println("academy_id:====="+user.getAcademyId());
+
 		userService.save(user);
 
 		try {

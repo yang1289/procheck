@@ -21,12 +21,12 @@ public class AcademyService {
         academyRepository.save(academy);
     }
 
-    public List<Academy> findByPid(int pid){
-        return academyRepository.findByPid(pid);
-    }
-
     public Academy findById(int id){
         return academyRepository.findById(id);
+    }
+
+    public List<Academy> findAll(){
+        return academyRepository.findAll();
     }
 
 }

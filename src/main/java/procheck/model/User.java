@@ -42,13 +42,6 @@ public class User implements Serializable{
 	
 	private String url;
 
-	private Integer academyId;
-
-	private Integer majorId;
-
-	private Integer classId;
-
-	
 	@ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(
 				name="pro_user_role",
@@ -60,6 +53,16 @@ public class User implements Serializable{
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
 	private Set<Project> projects=new HashSet<>();
+
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "academy_id")
+	private Academy academy;
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "major_id")
+	private Major major;
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "grade_id")
+	private Grade grade;
 
 	public User(){
 		
@@ -145,28 +148,27 @@ public class User implements Serializable{
 		this.chineseName = chineseName;
 	}
 
-
-	public Integer getAcademyId() {
-		return academyId;
+	public Academy getAcademy() {
+		return academy;
 	}
 
-	public void setAcademyId(Integer academyId) {
-		this.academyId = academyId;
+	public void setAcademy(Academy academy) {
+		this.academy = academy;
 	}
 
-	public Integer getMajorId() {
-		return majorId;
+	public Major getMajor() {
+		return major;
 	}
 
-	public void setMajorId(Integer majorId) {
-		this.majorId = majorId;
+	public void setMajor(Major major) {
+		this.major = major;
 	}
 
-	public Integer getClassId() {
-		return classId;
+	public Grade getGrade() {
+		return grade;
 	}
 
-	public void setClassId(Integer classId) {
-		this.classId = classId;
+	public void setGrade(Grade grade) {
+		this.grade = grade;
 	}
 }

@@ -23,6 +23,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">项目审核</div>
                     <div class="panel-body">
+                        <#if message??>
+                            <div class="alert alert-info" role="alert">${message}</div>
+                        </#if>
                         <table class="table table-striped table-bordered responsive">
                             <thead>
                             <tr>

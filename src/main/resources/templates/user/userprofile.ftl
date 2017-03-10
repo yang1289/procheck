@@ -51,7 +51,7 @@
                                     <option value="">无</option>
                                     <#if academymaplist.rootacademylist??>
                                         <#list academymaplist.rootacademylist as rootacademy>
-                                            <option value="${rootacademy.id!}" id="option_${rootacademy.id!}">${rootacademy.name!}</option>
+                                            <option value="${rootacademy.id!}" id="academy_${rootacademy.id!}">${rootacademy.name!}</option>
                                         </#list>
                                     </#if>
                                 </select>
@@ -63,7 +63,7 @@
                                     <option value="">无</option>
                                     <#if academymaplist.majorlist??>
                                         <#list academymaplist.majorlist as majorli>
-                                            <option value="${majorli.id!}" id="option_${majorli.id}">${majorli.name!}</option>
+                                            <option value="${majorli.id!}" id="major_${majorli.id}">${majorli.name!}</option>
                                         </#list>
                                     </#if>
                                 </select>
@@ -75,7 +75,7 @@
                                     <option value="">无</option>
                                     <#if academymaplist.classlist??>
                                         <#list academymaplist.classlist as classname>
-                                            <option value="${classname.id!}" id="option_${classname.id}">${classname.name!}</option>
+                                            <option value="${classname.id!}" id="grade_${classname.id}">${classname.name!}</option>
                                         </#list>
                                     </#if>
                                 </select>
@@ -104,55 +104,57 @@
                             </div>
                             <script type="text/javascript">
                                 <#if academymap.rootacademy??>
-                                    $("#option_${academymap.rootacademy.id}").attr("selected",true);
+                                    $("#academy_${academymap.rootacademy.id}").attr("selected",true);
                                     <#if academymap.major??>
-                                        $("#option_${academymap.major.id}").attr("selected",true);
+                                        $("#major_${academymap.major.id}").attr("selected",true);
                                         <#if academymap.classname??>
-                                            $("#option_${academymap.classname.id}").attr("selected",true);
+
+                                            $("#grade_${academymap.classname.id}").attr("selected",true);
                                         <#else>
                                             var major=$("#major").val();
                                             var selecting=$("#classname");
-                                            getAjax(major,selecting);
+                                            getAjax(major,selecting,"major");
                                         </#if>
                                     <#else>
                                         var academy=$("#academy").val();
                                         var selecting=$("#major");
-                                        getAjax(academy,selecting);
+                                        getAjax(academy,selecting,"academy");
                                     </#if>
                                 </#if>
                                 var em=$("#errorMessage");
                                 $("#academy").change(function(){
-                                    var pid=$(this).val();
+                                    var id=$(this).val();
                                     var selecting=$("#major");
-                                    getAjax(pid,selecting);
-                                    if(pid==""){
+                                    getAjax(id,selecting,"academy");
+                                    if(id==""){
                                         $("#classname").html('<option value="">无</option>')
                                     }
                                 });
 
                                 $("#major").change(function(){
-                                   var pid=$(this).val();
+                                   var id=$(this).val();
                                    var selecting=$("#classname");
-                                   getAjax(pid,selecting);
+                                   getAjax(id,selecting,"major");
                                 });
 
                                 function roleSubmit(){
                                     $("#save_modal").modal('show');
                                 }
 
-                                function getAjax(pid,selecting){
+                                function getAjax(id,selecting,levelname){
                                     var data={
-                                        pid:pid,
+                                        id:id,
+                                        levelname:levelname,
                                         ${_csrf.parameterName}:"${_csrf.token}",
                                      };
-                                    if(pid!=""){
+                                    if(id!=""){
                                         $.ajax({
-                                            url:"/academy/findmajor",
+                                            url:"/academy/findChild",
                                             dataType:"JSON",
                                             data:data,
                                             method:"post",
                                             error:function(){
-                                                em.html('<div class="alert alert-info role="alert">出现错误</div>')
+                                                em.html('<div class="alert alert-info role="alert"> 系统问题</div>')
                                             },
                                             success:function(data){
                                                 selecting.html('<option value="">无</option>');

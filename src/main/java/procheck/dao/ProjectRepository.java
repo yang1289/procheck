@@ -23,5 +23,7 @@ public interface ProjectRepository extends JpaRepository<Project,Integer>{
     public List<Project> findByAcademyId(int id);
 
     public List<Project> findByAcademyIdAndAdviserIsCheck(int id,boolean bool);
+    public List<Project> findByAcademyIdAndAdviserIsCheckAndAcademyIsCheck(int id,boolean adviserbool,boolean academybool);
+    public List<Project> findByAcademyIsCheckAndCollegeIsCheck(boolean academybool,boolean collegebool);
 
 }

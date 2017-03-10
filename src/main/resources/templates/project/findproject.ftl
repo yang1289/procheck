@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer"><button type="button" class="btn btn-primary">修改</button></div>
+                    <div class="panel-footer"><a href="/project/edit?id=${project.id}"><button type="button" class="btn btn-primary">修改</button></a></div>
                 </div>
 
                 <div class="panel panel-default" >

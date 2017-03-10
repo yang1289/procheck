@@ -76,17 +76,17 @@
                                 </div>
                             </div>
                             <script type="text/javascript">
-
+                                var em=$("#errorMessage");
                                 $("#academy").change(function(){
-                                    var pid=$(this).val();
+                                    var id=$(this).val();
                                     var data={
-                                        pid:pid,
+                                        id:id,
+                                        levelname:"academy",
                                         ${_csrf.parameterName}:"${_csrf.token}",
                                     };
-                                    if(pid!=""){
-
+                                    if(id!=""){
                                         $.ajax({
-                                            url:"/academy/findmajor",
+                                            url:"/academy/findChild",
                                             dataType:"JSON",
                                             data:data,
                                             method:"post",

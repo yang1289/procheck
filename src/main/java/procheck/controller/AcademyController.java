@@ -1,5 +1,6 @@
 package procheck.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,9 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import procheck.model.Academy;
+import procheck.model.Grade;
+import procheck.model.Major;
 import procheck.service.AcademyService;
+import procheck.service.GradeService;
+import procheck.service.MajorService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2017/3/7.
@@ -19,12 +26,20 @@ import java.util.List;
 @Controller
 @RequestMapping("/academy")
 public class AcademyController {
+
+    Logger log= Logger.getLogger(AcademyController.class);
+
     @Autowired
     private AcademyService academyService;
 
+    @Autowired
+    private MajorService majorService;
+
+    @Autowired
+    private GradeService gradeService;
     @GetMapping("/add")
     public String academyadding(Model model){
-        List<Academy> academys=academyService.findByPid(0);
+        List<Academy> academys=academyService.findAll();
         model.addAttribute("academys",academys);
         return "/academy/academyadd";
     }
@@ -32,30 +47,45 @@ public class AcademyController {
     @PostMapping("/add")
     public String academyadded(Model model,String name,Integer academyid,Integer majorid){
         Academy academy=new Academy();
+        Major major=new Major();
+        Grade grade=new Grade();
+
 
         System.out.println("majorId:====="+majorid);
         System.out.println("academyId:====="+academyid);
         if(academyid!=null){
             if(majorid!=null){
-                academy.setPid(majorid);
-                Academy preacademy=academyService.findById(majorid);
-                name=preacademy.getName()+name;
+                grade.setMajor(majorService.findByid(majorid));
+                name=majorService.findByid(majorid).getName()+name;
+                grade.setName(name);
+                gradeService.save(grade);
             }else{
-                academy.setPid(academyid);
+                major.setAcademy(academyService.findById(academyid));
+                major.setName(name);
+                majorService.save(major);
             }
         }else{
-            academy.setPid(0);
+            academy.setName(name);
+            academyService.save(academy);
         }
-        academy.setName(name);
-        System.out.println("Pid:======"+academy.getPid());
-        academyService.save(academy);
-        List<Academy> academys=academyService.findByPid(0);
+
+        List<Academy> academys=academyService.findAll();
         model.addAttribute("academys",academys);
         return "/academy/academyadd";
     }
-    @PostMapping("findmajor")
+    @PostMapping("findChild")
     @ResponseBody
-    public List<Academy> findMajor(Integer pid){
-        return academyService.findByPid(pid);
+    public Set findMajor(Integer id, String levelname){
+        System.out.println("levelname:======"+levelname);
+        System.out.println("id:======"+id);
+        if(levelname.equals("academy")){
+            Academy academy=academyService.findById(id);
+            return academy.getMajors();
+        }else if(levelname.equals("major")){
+            return majorService.findByid(id).getGrades();
+        } else{
+            return null;
+        }
+
     }
 }

@@ -52,4 +52,12 @@ public class ProjectService {
     public List<Project> findByAcademyIdAndAdviserIsCheck(int id,boolean bool){
         return projectRepository.findByAcademyIdAndAdviserIsCheck(id,bool);
     }
+
+    public List<Project> findByAcademyIsCheckAndCollegeIsCheck(boolean academybool,boolean collegebool){
+        return projectRepository.findByAcademyIsCheckAndCollegeIsCheck(academybool,collegebool);
+    }
+
+    public List<Project> findByAcademyIdAndAdviserIsCheckAndAcademyIsCheck(int id,boolean adviserbool,boolean academybool){
+        return projectRepository.findByAcademyIdAndAdviserIsCheckAndAcademyIsCheck(id,adviserbool,academybool);
+    }
 }

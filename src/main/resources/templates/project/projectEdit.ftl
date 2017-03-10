@@ -10,6 +10,9 @@
                     <a href="/index">主页</a>
                 </li>
                 <li>
+                    <a href="/project/list">项目列表</a>
+                </li>
+                <li>
                     <a href="/project/edit?id=${project.id!}">修改项目</a>
                 </li>
 

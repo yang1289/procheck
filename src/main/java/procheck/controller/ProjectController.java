@@ -50,10 +50,10 @@ public class ProjectController {
 //        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         Project project=new Project();
         User user=userService.findUserByUsername(name);
-        Integer academyId=user.getAcademyId();
+        Academy academy=user.getAcademy();
         Date date=new Date();
-        if(academyId!=null){
-            project.setAcademy(academyService.findById(academyId));
+        if(academy!=null){
+            project.setAcademy(user.getAcademy());
             project.setProjectName(projectname);
             project.setProjectInfo(content);
             project.setCreateTime(date);
@@ -82,7 +82,7 @@ public class ProjectController {
         }
         RoleCheck roleCheck=new RoleCheck();
         System.out.println("RoleName:========="+role.getName());
-        if(user.getAcademyId()!=null){
+        if(user.getAcademy()!=null){
             if(roleCheck.isStudent(role.getName())){
                 List<Project> projects=projectService.findByUserId(user.getId());
                 model.addAttribute("projects",projects);
@@ -91,13 +91,13 @@ public class ProjectController {
                     System.out.println("isPublish:======="+project.isPublished());
                 }
             }else if(roleCheck.isCpgroup(role.getName())){
-                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                List<Project> projects=projectService.findAll();
                 model.addAttribute("projects",projects);
             }else if(roleCheck.isAdviser(role.getName())){
-                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                List<Project> projects=projectService.findByAcademyId(user.getAcademy().getId());
                 model.addAttribute("projects",projects);
             }else if(roleCheck.isFpgroup(role.getName())){
-                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                List<Project> projects=projectService.findByAcademyId(user.getAcademy().getId());
                 model.addAttribute("projects",projects);
             }
         }else{
@@ -201,15 +201,18 @@ public class ProjectController {
             role=_role;
         }
         List<Project> projects=new ArrayList<>();
-
-        if(roleCheck.isAdviser(role.getName())){
-            projects=projectService.findByAcademyIdAndAdviserIsCheck(user.getAcademyId(),false);
-
-        }else if(roleCheck.isFpgroup(role.getName())){
-            projects=projectService.findByIsAdviserCheck(true);
-        }else if(roleCheck.isCpgroup(role.getName())){
-            projects=projectService.findByIsAcademyCheck(true);
+        if(user.getAcademy()!=null){
+            if(roleCheck.isAdviser(role.getName())){
+                projects=projectService.findByAcademyIdAndAdviserIsCheck(user.getAcademy().getId(),false);
+            }else if(roleCheck.isFpgroup(role.getName())){
+                projects=projectService.findByAcademyIdAndAdviserIsCheckAndAcademyIsCheck(user.getAcademy().getId(),true,false);
+            }else if(roleCheck.isCpgroup(role.getName())){
+                projects=projectService.findByAcademyIsCheckAndCollegeIsCheck(true,false);
+            }
+        }else{
+            model.addAttribute("message","请先配置个人信息");
         }
+
         model.addAttribute("user",user);
         model.addAttribute("projects",projects);
         return "/project/checklist";
@@ -235,9 +238,9 @@ public class ProjectController {
         String name=SecurityContextHolder.getContext().getAuthentication().getName();
         User user=userService.findUserByUsername(name);
         Project project=projectService.findById(id);
-        if(user.getAcademyId()!=null){
+        if(user.getAcademy()!=null){
             project.setProjectInfo(content);
-            project.setAcademy(academyService.findById(user.getAcademyId()));
+            project.setAcademy(user.getAcademy());
             projectService.save(project);
             model.addAttribute("message","修改成功");
 

@@ -18,12 +18,17 @@ public class Academy implements Serializable{
     private int id;
     @Column(nullable = false)
     private String name;
-
-    private Integer pid;
-
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "academy")
+    @JsonIgnore
     private Set<Project> projects=new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "academy")
+    @JsonIgnore
+    private Set<Major> majors=new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "academy")
+    @JsonIgnore
+    private Set<User> users=new HashSet<>();
     public int getId() {
         return id;
     }
@@ -32,21 +37,35 @@ public class Academy implements Serializable{
         this.id = id;
     }
 
-    public Integer getPid() {
-        return pid;
-    }
-
-    public void setPid(Integer pid) {
-        this.pid = pid;
-    }
-
-
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
+
+    public Set<Major> getMajors() {
+        return majors;
+    }
+
+    public void setMajors(Set<Major> majors) {
+        this.majors = majors;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }
