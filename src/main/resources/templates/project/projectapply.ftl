@@ -23,6 +23,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">项目申请</div>
                     <div class="panel-body">
+                        <#if message??>
+                            <div class="alert alert-info" role="alert">${message!}</div>
+                        </#if>
                         <form role="form" action="/project/apply?name=${_principal}" method="POST" id="form">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <div class="form-group">

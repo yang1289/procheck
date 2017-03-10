@@ -19,11 +19,10 @@ public class Academy implements Serializable{
     @Column(nullable = false)
     private String name;
 
-    private int pid;
+    private Integer pid;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "academy")
-    private Set<User> users=new HashSet<>();
+    private Set<Project> projects=new HashSet<>();
 
     public int getId() {
         return id;
@@ -33,13 +32,15 @@ public class Academy implements Serializable{
         this.id = id;
     }
 
-    public int getPid() {
+    public Integer getPid() {
         return pid;
     }
 
-    public void setPid(int pid) {
+    public void setPid(Integer pid) {
         this.pid = pid;
     }
+
+
 
     public String getName() {
         return name;
@@ -47,13 +48,5 @@ public class Academy implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 }

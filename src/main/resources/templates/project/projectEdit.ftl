@@ -10,7 +10,7 @@
                     <a href="/index">主页</a>
                 </li>
                 <li>
-                    <a href="/project/apply">申请项目</a>
+                    <a href="/project/edit?id=${project.id!}">修改项目</a>
                 </li>
 
 
@@ -21,21 +21,22 @@
         <div class="row">
             <div class="box col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">项目申请</div>
+                    <div class="panel-heading">项目修改</div>
                     <div class="panel-body">
                         <#if message??>
                             <div class="alert alert-info" role="alert">${message!}</div>
                         </#if>
-                        <form role="form" action="/project/apply?name=${_principal}" method="POST" id="form">
+                        <form role="form" action="/project/edit?id=${project.id!}" method="POST" id="form">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <div class="form-group">
                                 <label for="name">项目名称</label>
-                                <input type="text" class="form-control" name="projectname" id="projectname" value=""/>
+                                <input type="text" class="form-control" name="projectname" id="projectname" value="${project.projectName!}" disabled/>
                             </div>
                             <div class="form-group">
                                 <label form="role">项目详情</label>
                                 <div>
                                     <script id="container" name="content"  type="text/plain">
+                                        ${project.projectInfo!}
                                     </script>
                                     <!-- 配置文件 -->
                                     <script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>

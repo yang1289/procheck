@@ -125,6 +125,9 @@
                                     var pid=$(this).val();
                                     var selecting=$("#major");
                                     getAjax(pid,selecting);
+                                    if(pid==""){
+                                        $("#classname").html('<option value="">无</option>')
+                                    }
                                 });
 
                                 $("#major").change(function(){

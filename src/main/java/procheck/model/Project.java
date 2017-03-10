@@ -38,6 +38,10 @@ public class Project implements Serializable {
     @JsonFormat(pattern = constants.DATETIME_FORMAT)
     private Date createTime;
 
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "academy_id")
+    private Academy academy;
+
     public int getId() {
         return id;
     }
@@ -133,5 +137,13 @@ public class Project implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Academy getAcademy() {
+        return academy;
+    }
+
+    public void setAcademy(Academy academy) {
+        this.academy = academy;
     }
 }

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import procheck.model.Academy;
 import procheck.model.Project;
 import procheck.model.Role;
 import procheck.model.User;
+import procheck.service.AcademyService;
 import procheck.service.ProjectService;
 import procheck.service.UserService;
 import procheck.util.ProjectCheckMessage;
@@ -33,6 +35,8 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AcademyService academyService;
 
 
 
@@ -42,19 +46,27 @@ public class ProjectController {
     }
 
     @PostMapping("/apply")
-    public String applyedProject(@RequestParam String name,String projectname,String content) throws Exception{
+    public String applyedProject(@RequestParam String name,String projectname,String content,Model model) throws Exception{
 //        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         Project project=new Project();
         User user=userService.findUserByUsername(name);
+        Integer academyId=user.getAcademyId();
         Date date=new Date();
-        project.setProjectName(projectname);
-        project.setProjectInfo(content);
-        project.setCreateTime(date);
-        project.setUser(user);
-        project.setAcademyIsCheck(false);
-        project.setAdviserIsCheck(false);
-        project.setCollegeIsCheck(false);
-        projectService.save(project);
+        if(academyId!=null){
+            project.setAcademy(academyService.findById(academyId));
+            project.setProjectName(projectname);
+            project.setProjectInfo(content);
+            project.setCreateTime(date);
+            project.setUser(user);
+            project.setAcademyIsCheck(false);
+            project.setAdviserIsCheck(false);
+            project.setCollegeIsCheck(false);
+            projectService.save(project);
+            model.addAttribute("message","申请成功");
+        }else{
+            model.addAttribute("message","你的个人信息没有配置");
+        }
+
         return "/project/projectapply";
     }
 
@@ -70,23 +82,28 @@ public class ProjectController {
         }
         RoleCheck roleCheck=new RoleCheck();
         System.out.println("RoleName:========="+role.getName());
-        if(roleCheck.isStudent(role.getName())){
-            List<Project> projects=projectService.findByUserId(user.getId());
-            model.addAttribute("projects",projects);
+        if(user.getAcademyId()!=null){
+            if(roleCheck.isStudent(role.getName())){
+                List<Project> projects=projectService.findByUserId(user.getId());
+                model.addAttribute("projects",projects);
 
-            for (Project project:projects){
-                System.out.println("isPublish:======="+project.isPublished());
+                for (Project project:projects){
+                    System.out.println("isPublish:======="+project.isPublished());
+                }
+            }else if(roleCheck.isCpgroup(role.getName())){
+                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                model.addAttribute("projects",projects);
+            }else if(roleCheck.isAdviser(role.getName())){
+                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                model.addAttribute("projects",projects);
+            }else if(roleCheck.isFpgroup(role.getName())){
+                List<Project> projects=projectService.findByAcademyId(user.getAcademyId());
+                model.addAttribute("projects",projects);
             }
-        }else if(roleCheck.isCpgroup(role.getName())){
-            List<Project> projects=projectService.findAll();
-            model.addAttribute("projects",projects);
-        }else if(roleCheck.isAdviser(role.getName())){
-            List<Project> projects=projectService.findAll();
-            model.addAttribute("projects",projects);
-        }else if(roleCheck.isFpgroup(role.getName())){
-            List<Project> projects=projectService.findAll();
-            model.addAttribute("projects",projects);
+        }else{
+            model.addAttribute("message","请先配置个人信息");
         }
+
         model.addAttribute("rolename",role.getName());
         return "/project/projectlist";
 
@@ -186,7 +203,8 @@ public class ProjectController {
         List<Project> projects=new ArrayList<>();
 
         if(roleCheck.isAdviser(role.getName())){
-            projects=projectService.findByIsAdviserCheck(false);
+            projects=projectService.findByAcademyIdAndAdviserIsCheck(user.getAcademyId(),false);
+
         }else if(roleCheck.isFpgroup(role.getName())){
             projects=projectService.findByIsAdviserCheck(true);
         }else if(roleCheck.isCpgroup(role.getName())){
@@ -202,6 +220,32 @@ public class ProjectController {
         Project project=projectService.findById(id);
         model.addAttribute("project",project);
         return "/project/findproject";
+    }
+
+    @GetMapping("/edit")
+    public String projectEditing(@RequestParam int id,Model model){
+        Project project=projectService.findById(id);
+        model.addAttribute("project",project);
+        return "/project/projectEdit";
+
+    }
+
+    @PostMapping("/edit")
+    public String projectEdit(@RequestParam int id,String content,Model model) throws Exception {
+        String name=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(name);
+        Project project=projectService.findById(id);
+        if(user.getAcademyId()!=null){
+            project.setProjectInfo(content);
+            project.setAcademy(academyService.findById(user.getAcademyId()));
+            projectService.save(project);
+            model.addAttribute("message","修改成功");
+
+        }else{
+            model.addAttribute("message","请先配置个人信息");
+        }
+        model.addAttribute("project",projectService.findById(id));
+        return "/project/projectEdit";
     }
 
 }

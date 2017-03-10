@@ -45,8 +45,6 @@
 
                                         <td>
                                             <a class="btn btn-primary" href="/project/check?id=${project.id}">审核项目</a>
-                                            <a class="btn btn-info" href="#">修改</a>
-                                            <a class="btn btn-warning" href="#">删除</a>
                                         </td>
                                     </tr>
                                     </#list>

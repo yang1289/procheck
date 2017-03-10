@@ -41,6 +41,13 @@ public class User implements Serializable{
 	private String email;
 	
 	private String url;
+
+	private Integer academyId;
+
+	private Integer majorId;
+
+	private Integer classId;
+
 	
 	@ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(
@@ -53,10 +60,6 @@ public class User implements Serializable{
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
 	private Set<Project> projects=new HashSet<>();
-
-	@ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.LAZY)
-	@JoinColumn(name = "academy_id")
-	private Academy academy;
 
 	public User(){
 		
@@ -142,11 +145,28 @@ public class User implements Serializable{
 		this.chineseName = chineseName;
 	}
 
-	public Academy getAcademy() {
-		return academy;
+
+	public Integer getAcademyId() {
+		return academyId;
 	}
 
-	public void setAcademy(Academy academy) {
-		this.academy = academy;
+	public void setAcademyId(Integer academyId) {
+		this.academyId = academyId;
+	}
+
+	public Integer getMajorId() {
+		return majorId;
+	}
+
+	public void setMajorId(Integer majorId) {
+		this.majorId = majorId;
+	}
+
+	public Integer getClassId() {
+		return classId;
+	}
+
+	public void setClassId(Integer classId) {
+		this.classId = classId;
 	}
 }

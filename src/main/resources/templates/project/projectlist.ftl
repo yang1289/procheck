@@ -23,6 +23,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">项目申请</div>
                     <div class="panel-body">
+                        <#if message??>
+                            <div class="alert alert-info" role="alert">${message!}</div>
+                        </#if>
                         <table class="table table-striped table-bordered responsive">
                             <thead>
                                 <tr>
@@ -48,8 +51,10 @@
                                             <#if rolename=="dsoAdmin"||rolename=="adviser"||rolename=="cpgroup"||rolename=="fpgroup"||rolename=="ctsecretary">
                                                 <a class="btn btn-primary" href="/project/check?id=${project.id}">审核项目</a>
                                             </#if>
-                                            <a class="btn btn-info" href="#">修改</a>
-                                            <a class="btn btn-warning" href="#">删除</a>
+                                            <#if rolename=="student">
+                                                <a class="btn btn-info" href="/project/edit?id=${project.id}">修改</a>
+                                                <a class="btn btn-warning" href="#">删除</a>
+                                            </#if>
                                         </td>
                                     </tr>
                                     </#list>

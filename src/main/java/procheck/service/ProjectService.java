@@ -44,4 +44,12 @@ public class ProjectService {
     public List<Project> findByIsCollegeCheck(boolean bool){
         return projectRepository.findByCollegeIsCheck(bool);
     }
+
+    public List<Project> findByAcademyId(int id){
+        return projectRepository.findByAcademyId(id);
+    }
+
+    public List<Project> findByAcademyIdAndAdviserIsCheck(int id,boolean bool){
+        return projectRepository.findByAcademyIdAndAdviserIsCheck(id,bool);
+    }
 }
