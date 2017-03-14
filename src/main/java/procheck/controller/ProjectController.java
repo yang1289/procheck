@@ -6,15 +6,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import procheck.model.Academy;
-import procheck.model.Project;
-import procheck.model.Role;
-import procheck.model.User;
+import org.springframework.web.servlet.ModelAndView;
+import procheck.model.*;
 import procheck.service.AcademyService;
+import procheck.service.PermissionService;
 import procheck.service.ProjectService;
 import procheck.service.UserService;
 import procheck.util.ProjectCheckMessage;
@@ -37,11 +37,26 @@ public class ProjectController {
     private ProjectService projectService;
     @Autowired
     private AcademyService academyService;
+    @Autowired
+    private PermissionService permissionService;
 
 
 
     @GetMapping("/apply")
-    public String applyingProject(){
+    public String applyingProject(Model model){
+        String name=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(name);
+        List<Permission> list= permissionService.findByUserId(user.getId());
+        Permission permission=new Permission();
+        for(Permission fpermission:list){
+            if(fpermission.getName().contains("apply")){
+                permission=fpermission;
+            }
+        }
+        for(ProTable proTable:permission.getProTables()){
+           model.addAttribute("protable",proTable);
+        }
+
         return "/project/projectapply";
     }
 

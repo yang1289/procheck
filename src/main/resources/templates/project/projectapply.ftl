@@ -33,9 +33,12 @@
                                 <input type="text" class="form-control" name="projectname" id="projectname" value=""/>
                             </div>
                             <div class="form-group">
-                                <label form="role">项目详情</label>
+                                <label form="role">项目详情<span class="label label-warning">请尽量不要修改格式</span></label>
                                 <div>
                                     <script id="container" name="content"  type="text/plain">
+                                        <#if protable??>
+                                            ${protable.tableValue!}
+                                        </#if>
                                     </script>
                                     <!-- 配置文件 -->
                                     <script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>

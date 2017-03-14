@@ -20,6 +20,11 @@
                             <li><a class="" href="#"><i class="glyphicon glyphicon-list-alt"></i><span>初始化设置</span></a>
                             </li>
                         </#if>
+                        <#if _roles?seq_contains("protable:add")>
+                            <li><a class="" href="/protable/add"><i class="glyphicon glyphicon-list-alt"></i><span>表格设置</span></a>
+                            </li>
+                        </#if>
+
                         <#if _roles?seq_contains("project:list")>
                             <li class="accordion">
                                 <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目 </span></a>

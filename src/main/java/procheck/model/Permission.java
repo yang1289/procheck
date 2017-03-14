@@ -30,6 +30,9 @@ public class Permission implements Serializable {
 	@ManyToMany(mappedBy = "permissions",fetch = FetchType.LAZY)
 	private Set<Role> roles = new HashSet<Role>();
 
+	@ManyToMany(mappedBy = "permissions", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private Set<ProTable> proTables=new HashSet<>();
+
 	public int getId() {
 		return id;
 	}
@@ -78,4 +81,11 @@ public class Permission implements Serializable {
 		this.roles = roles;
 	}
 
+	public Set<ProTable> getProTables() {
+		return proTables;
+	}
+
+	public void setProTables(Set<ProTable> proTables) {
+		this.proTables = proTables;
+	}
 }
