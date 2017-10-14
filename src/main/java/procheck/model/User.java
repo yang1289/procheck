@@ -63,6 +63,8 @@ public class User implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "grade_id")
 	private Grade grade;
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY,mappedBy = "adviser")
+	private Set<Project> checkProjects=new HashSet<>();
 
 	public User(){
 		
@@ -170,5 +172,13 @@ public class User implements Serializable{
 
 	public void setGrade(Grade grade) {
 		this.grade = grade;
+	}
+
+	public Set<Project> getCheckProjects() {
+		return checkProjects;
+	}
+
+	public void setCheckProjects(Set<Project> checkProjects) {
+		this.checkProjects = checkProjects;
 	}
 }

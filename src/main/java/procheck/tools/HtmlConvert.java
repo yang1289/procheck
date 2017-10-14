@@ -136,7 +136,7 @@ public class HtmlConvert {
      * @throws Exception
      */
     protected Document url2xhtml(Project project) throws Exception {
-        Document doc = Jsoup.parse(project.getProjectInfo()); //获得
+        Document doc = Jsoup.parse(null); //获得
 
         if (logger.isDebugEnabled()) {
             logger.debug("baseUri: {}", doc.baseUri());

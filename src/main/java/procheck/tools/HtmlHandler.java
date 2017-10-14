@@ -20,14 +20,6 @@ import java.util.Map;
 
 public class HtmlHandler {
 
-    public Map getHtmlValue(Project project){
-        Map maphtml=new HashMap();
-        String projectName=project.getProjectName();
-        String html=project.getProjectInfo();
-        Document doc= Jsoup.parse(html);
-
-        return maphtml;
-    }
 
     public File CreateDocx(Project project) throws Exception {
         HtmlConvert htmlConvert=new HtmlConvert();

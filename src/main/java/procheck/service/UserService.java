@@ -1,12 +1,16 @@
 package procheck.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import procheck.dao.RoleRepository;
 import procheck.dao.UserRepository;
+import procheck.model.Role;
 import procheck.model.User;
 
 @Service
@@ -14,6 +18,8 @@ import procheck.model.User;
 public class UserService {
 	@Autowired
 	private UserRepository userDao;
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	public User findUserByUsername(String username){
 		User user=userDao.findByUsername(username);
@@ -35,5 +41,15 @@ public class UserService {
 	
 	public void update(User user){
 		userDao.save(user);
+	}
+
+	public List<User> findAdviser(){
+		Role role=roleRepository.findByName("adviser");
+		Set<User> advisers=role.getUsers();
+		List<User> listAdvisers=new ArrayList<>();
+		for(User user:advisers){
+			listAdvisers.add(user);
+		}
+		return listAdvisers;
 	}
 }

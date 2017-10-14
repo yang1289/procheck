@@ -1,5 +1,9 @@
 <#include "../common/layer.ftl">
-<@html page_title="角色配置">
+<@head page_title="项目申请"/>
+<@css></@css>
+<@js></@js>
+<@body>
+
 <div class="row">
     <#include "../common/left_menu.ftl"/>
     <@left_menu/>
@@ -16,95 +20,159 @@
 
             </ul>
         </div>
-
-
+        <script src="/static/js/apply.js" type="text/javascript"></script>
+        <div id="alert"></div>
         <div class="row">
             <div class="box col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">项目申请</div>
                     <div class="panel-body">
-                        <#if message??>
-                            <div class="alert alert-info" role="alert">${message!}</div>
-                        </#if>
-                        <form role="form" action="/project/apply?name=${_principal}" method="POST" id="form">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <div class="form-group">
-                                <label for="name">项目名称</label>
-                                <input type="text" class="form-control" name="projectname" id="projectname" value=""/>
-                            </div>
-                            <div class="form-group">
-                                <label form="role">项目详情<span class="label label-warning">请尽量不要修改格式</span></label>
-                                <div>
-                                    <script id="container" name="content"  type="text/plain">
-                                        <#if protable??>
-                                            ${protable.tableValue!}
-                                        </#if>
-                                    </script>
-                                    <!-- 配置文件 -->
-                                    <script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
-                                    <!-- 编辑器源码文件 -->
-                                    <script type="text/javascript" src="/static/js/ueditor/ueditor.all.js"></script>
+                        <ul id="pageTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#base" data-toggle="tab">
+                                    基本信息
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#applyuser" data-toggle="tab">
+                                    申请小组成员
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#applyIntro" data-toggle="tab">
+                                    申请说明
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#applyProgress" data-toggle="tab">
+                                    进度计划
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#expenditure" data-toggle="tab">
+                                    经费预算
+                                </a>
+                            </li>
+                        </ul>
+                        <div id="tabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="base">
 
+                                <div class="form-group col-md-12">
+                                    <label for="projectName">项目名称</label>
+                                    <input class="form-control" type="text" id="projectName" name="projectName" value=""/>
                                 </div>
-
-                            </div>
-                            <button type="button" id="roleBtn" onclick="clickmodal()" class="btn btn-lg btn-default"  data-target="#save_modal">保存</button>
-                            <div id="error"></div>
-                            <div class="modal fade" id="save_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="myModalLabel">注意</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="alert alert-info" id="alert" role="alert"></div>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                            <button type="submit" id="save"  class="btn btn-primary">保存</button>
-
-                                        </div>
-                                    </div>
+                                <div class="form-group col-md-6">
+                                    <label for="adviser">指导老师</label>
+                                    <input class="form-control" type="text" id="adviser" name="adviser" value=""/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="jobTitle">职称</label>
+                                    <input class="form-control" type="text" id="jobTitle" name="jobTitle" value=""/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="libName">实验室名称</label>
+                                    <input class="form-control" type="text" id="libName" name="libName" value=""/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="teachUnit">所属教学单位</label>
+                                    <input class="form-control" type="text" id="teachUnit" name="teachUnit" value=""/>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <button type="button" id="baseapply" onclick="saveBase('${_csrf.token}')" class="btn btn-primary">保存</button>
                                 </div>
                             </div>
-
-                            <script type="text/javascript">
-                                var ue = UE.getEditor('container',{
-                                    initialFrameHeight:500
-                                });
-                                ue.ready(function(){
-                                    ue.execCommand("serverparam",{
-                                        "${_csrf.parameterName}":"${_csrf.token}"
-                                    })
-                                });
-                                function clickmodal(){
-                                    var projectname=$("#projectname").val();
-                                    var content=ue.getContent();
-                                    var em=0;
-                                    var form=$("form");
-                                    var error=$("#error");
-
-                                    if(projectname.length==0){
-                                        em++;
-                                        error.html('<div class="alert alert-info" role="alert">项目名称不能为空</div>');
-                                    }
-                                    if(content.length==0){
-                                        em++;
-                                        error.html('<div class="alert alert-info" role="alert">项目介绍不能为空</div>');
-                                    }
-                                    if(em==0){
-                                        $("#alert").html("是否保存项目："+projectname);
-                                        $("#save_modal").modal('show');
-                                    }else{
-                                        $("#save_modal").modal('hide');
-                                    }
-
-                                }
-
-                            </script>
-                        </form>
+                            <div class="tab-pane fade" id="applyuser">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>申请人姓名</td><td>申请人专业</td><td>申请人学号</td><td>申请人班级</td><td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="user">
+                                        <tr id="user_0">
+                                            <td><input class="form-control" type="text" value=""/></td>
+                                            <td><input class="form-control" type="text" value=""/></td>
+                                            <td><input class="form-control" type="text" value=""/></td>
+                                            <td><input class="form-control" type="text" value=""/></td>
+                                            <td>
+                                                <button class="btn btn-info" onclick="addUser(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                                <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <button type="button" id="baseapply" class="btn btn-primary" onclick="saveUsers('user','${_csrf.token}')">保存</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="applyIntro">
+                                <div class="form-group">
+                                    <label for="">研究现状</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">研究方案</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">研究工作的条件保障（研究室，研究基地等）</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">拟提供成果及成果形式</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" id="baseapply" class="btn btn-primary" >保存</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="applyProgress">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>计划时间</td><td>计划事件</td><td>计划备注</td><td></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="progress">
+                                    <tr id="progress_0">
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td>
+                                            <button class="btn btn-info" onclick="addProgress(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                            <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <button type="button" id="baseapply" class="btn btn-primary" onclick="saveTable('progress')">保存</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="expenditure">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>经费说明</td><td>经费</td><td>备注</td><td></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="expend">
+                                    <tr id="expend_0">
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td><input class="form-control" type="text" value=""/></td>
+                                        <td>
+                                            <button class="btn btn-info" onclick="addExpend(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                            <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <button type="button" id="baseapply" class="btn btn-primary" onclick="saveTable('expend')">保存</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,4 +180,4 @@
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
-</@html>
+</@body>

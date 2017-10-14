@@ -27,50 +27,7 @@ import java.util.Map;
 public class DocContiroller {
     @Autowired
     private ProjectService projectService;
-    @GetMapping("/generation")
-    @ResponseBody
-    public void generation(@RequestParam int id, HttpServletRequest request, HttpServletResponse response){
-        Project project=projectService.findById(id);
-        HtmlHandler htmlHandler=new HtmlHandler();
-        Map map=htmlHandler.getHtmlValue(project);
-        DocUtil docUtil=new DocUtil();
-        //docUtil.createApply(map);
-        try {
-           // docUtil.createApply(map);
-            docUtil.createWord(project,request,response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @GetMapping("/generationdocx")
-    @ResponseBody
-    public void generationDocx(@RequestParam int id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Project project=projectService.findById(id);
-        HtmlHandler htmlHandler=new HtmlHandler();
-        DocUtil docUtil=new DocUtil();
-        //docUtil.createApply(map);
-       File file=htmlHandler.CreateDocx(project);
-       String filename=file.getName();
-        response.setContentType("application/msword");
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename,"utf-8"));
-        FileInputStream fileinput=new FileInputStream(file);
-        OutputStream outstream=response.getOutputStream();
-        byte buffer[] = new byte[1024];
-        int len = 0;
-        while((len=fileinput.read(buffer))>0){
-            outstream.write(buffer,0,len);
-        }
-        fileinput.close();
-        outstream.close();
-        File newfile=new File(file.getAbsolutePath());
-        try {
-            if(newfile.exists()){
-                newfile.delete();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-    }
+
 
 }

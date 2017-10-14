@@ -1,5 +1,6 @@
 package procheck.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,19 +8,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import procheck.dao.ExpenditureRepository;
 import procheck.model.*;
-import procheck.service.AcademyService;
-import procheck.service.PermissionService;
-import procheck.service.ProjectService;
-import procheck.service.UserService;
-import procheck.util.ProjectCheckMessage;
-import procheck.util.RoleCheck;
+import procheck.service.*;
+import procheck.util.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -29,7 +26,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
-
+    private static Logger logger=Logger.getLogger(ProjectController.class);
     @Autowired
     private UserService userService;
 
@@ -39,52 +36,236 @@ public class ProjectController {
     private AcademyService academyService;
     @Autowired
     private PermissionService permissionService;
-
-
-
+    @Autowired
+    private ApplyUserService applyUserService;
+    @Autowired
+    private ProgressPlanService progressPlanService;
+    @Autowired
+    private ExpenditureService expenditureService;
     @GetMapping("/apply")
-    public String applyingProject(Model model){
+    public void applyingProject(HttpServletResponse response){
         String name=SecurityContextHolder.getContext().getAuthentication().getName();
         User user=userService.findUserByUsername(name);
-        List<Permission> list= permissionService.findByUserId(user.getId());
-        Permission permission=new Permission();
-        for(Permission fpermission:list){
-            if(fpermission.getName().contains("apply")){
-                permission=fpermission;
+        Set<Project> projects=user.getProjects();
+        Integer id=0;
+        for(Project pro:projects){
+            if(!pro.isCreated()){
+                id= pro.getId();
             }
         }
-        for(ProTable proTable:permission.getProTables()){
-           model.addAttribute("protable",proTable);
+
+        try {
+            if(id!=0){
+                response.sendRedirect("/project/applystep1?method=apply&&id="+id);
+            }else{
+                response.sendRedirect("/project/applystep1?method=apply");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return "/project/projectapply";
     }
+    @GetMapping("/applystep1")
+    public String stepone(Integer id,Model model,@RequestParam String method){
+        if(id!=null){
+            Project project=projectService.findById(id);
+            model.addAttribute("project",project);
 
-    @PostMapping("/apply")
-    public String applyedProject(@RequestParam String name,String projectname,String content,Model model) throws Exception{
-//        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        }
+        model.addAttribute("advisers",userService.findAdviser());
+        logger.info("id="+id);
+        if(method.equals("edit")){
+            return "/project/edit/step1";
+        }else {
+            return "/project/apply/step1";
+        }
+
+
+    }
+    @PostMapping("/applystep1")
+    public String saveStepOne(String projectName,int adviserId,String jobTitle,String libName,String teachUnit,Model model,Integer id,@RequestParam String method) throws Exception{
+        String usernum=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(usernum);
         Project project=new Project();
-        User user=userService.findUserByUsername(name);
-        Academy academy=user.getAcademy();
-        Date date=new Date();
-        if(academy!=null){
-            project.setAcademy(user.getAcademy());
-            project.setProjectName(projectname);
-            project.setProjectInfo(content);
-            project.setCreateTime(date);
-            project.setUser(user);
-            project.setAcademyIsCheck(false);
-            project.setAdviserIsCheck(false);
-            project.setCollegeIsCheck(false);
-            projectService.save(project);
-            model.addAttribute("message","申请成功");
+        if(id!=null){
+            project=projectService.findById(id);
         }else{
-            model.addAttribute("message","你的个人信息没有配置");
+            project.setNeedCheck(false);
+            project.setCreateTime(new Date());
+            project.setUser(user);
+        }
+        if(projectName!=""){
+            project.setProjectName(projectName);
+        }else{
+            model.addAttribute("message","项目名称不能为空");
+            return "/project/step1";
+        }
+        if(adviserId>=0){
+            User adviser=userService.findById(adviserId);
+            project.setAdviser(adviser);
+        }
+        project.setJobTitle(jobTitle);
+        project.setLibName(libName);
+        project.setTeachUnit(teachUnit);
+        project.setAcademy(user.getAcademy());
+        Project pro=projectService.projectSave(project);
+        logger.info("project.id======"+pro.getId());
+        model.addAttribute("project",pro);
+        model.addAttribute("advisers",userService.findAdviser());
+        if(method.equals("edit")){
+            model.addAttribute("message","保存成功");
+            return "/project/edit/step1";
+        }else{
+            return "/project/apply/step2";
         }
 
-        return "/project/projectapply";
     }
+    @GetMapping("/applystep2")
+    public String steptwo(Integer id,Model model,@RequestParam String method){
+        if(id!=null){
+            Project project=projectService.findById(id);
+            model.addAttribute("project",project);
+        }
+        if(method.equals("edit")){
+            return "/project/edit/step2";
+        }else{
+            return "/project/apply/step2";
+        }
 
+    }
+    @PostMapping("/applystep2")
+    public String saveSteptwo(Model model, ApplyUserModel applyUserModel,int id,@RequestParam String method){
+        if(applyUserModel.getApplyusers()!=null){
+        logger.info("applyuser.size:::::::="+ applyUserModel.getApplyusers().size());
+        Project project=projectService.findById(id);
+        List<ApplyUser> applyUserList=applyUserModel.getApplyusers();
+        Set<ApplyUser> applyUsers=new HashSet<>();
+        Set<ApplyUser> oldApplyUsers=project.getApplyUsers();
+        if(oldApplyUsers.size()!=0){
+            applyUserService.deleteApplyUsers(oldApplyUsers);
+        }
+        for(ApplyUser applyUser:applyUserList){
+                applyUsers.add(applyUser);
+        }
+        project.setApplyUsers(applyUsers);
+        projectService.projectSave(project);
+        model.addAttribute("project",project);
+        if(method.equals("edit")){
+            model.addAttribute("message","保存成功");
+            return "/project/edit/step2";
+        }else{
+            return "/project/apply/step3";
+        }
+        }else{
+            model.addAttribute("message","申请人不能为空");
+            return "/project/apply/step2";
+        }
+    }
+    @GetMapping("/applystep3")
+    public String stepthree(Integer id,Model model,@RequestParam String method){
+        if(id!=null){
+            Project project=projectService.findById(id);
+            logger.info("研究现状:"+project.getSearchCondition());
+            model.addAttribute("project",project);
+        }
+        logger.info("step3.method::"+method);
+        if(method.equals("edit")){
+            return "/project/edit/step3";
+        }else{
+            return "/project/apply/step3";
+        }
+    }
+    @PostMapping("/applystep3")
+    public String saveStepthree(int id,String searchCondition,String searchPlan,String createPoint,String searchConditionSupport,String achievenmentMethod,Model model,@RequestParam String method){
+        Project project=projectService.findById(id);
+        project.setSearchCondition(searchCondition);
+        project.setSearchPlan(searchPlan);
+        project.setCreatePoint(createPoint);
+        project.setSearchConditionSupport(searchConditionSupport);
+        project.setAchievenmentMethod(achievenmentMethod);
+        projectService.projectSave(project);
+        model.addAttribute("project",project);
+        if(method.equals("edit")){
+            model.addAttribute("message","保存成功");
+            return "/project/edit/step3";
+        }else{
+            return "/project/apply/step4";
+        }
+    }
+    @GetMapping("/applystep4")
+    public String stepfour(Integer id,Model model,@RequestParam String method){
+        if(id!=null){
+            Project project=projectService.findById(id);
+            model.addAttribute("project",project);
+        }
+        if(method.equals("edit")){
+            return "/project/edit/step4";
+        }else{
+            return "/project/apply/step4";
+        }
+    }
+    @PostMapping("/applystep4")
+    public String saveStepfour(Model model, ProgressPlanModel progressPlanModel,int id,@RequestParam String method){
+        Project project=projectService.findById(id);
+        List<ProgressPlan> progressPlans=progressPlanModel.getProgressPlans();
+        Set<ProgressPlan> progressPlanSet=new HashSet<>();
+        Set<ProgressPlan> oldProgressPlans=project.getProgressPlans();
+        if(oldProgressPlans.size()!=0){
+            progressPlanService.deleteProgressPlans(oldProgressPlans);
+        }
+        for(ProgressPlan progressPlan:progressPlans){
+            progressPlanSet.add(progressPlan);
+        }
+        project.setProgressPlans(progressPlanSet);
+        projectService.projectSave(project);
+        model.addAttribute("project",project);
+        if(method.equals("edit")){
+            model.addAttribute("message","保存成功");
+            return "/project/edit/step4";
+        }else{
+            return "/project/apply/step5";
+        }
+    }
+    @GetMapping("/applystep5")
+    public String stepfive(Model model,Integer id,@RequestParam String method){
+        if(id!=null){
+            Project project=projectService.findById(id);
+            model.addAttribute("project",project);
+            logger.info("expenditure"+project.getExpenditures().size());
+        }
+        if(method.equals("edit")){
+            return "/project/edit/step5";
+        }else{
+            return "/project/apply/step5";
+        }
+    }
+    @PostMapping("/applystep5")
+    public String saveStepfive(Model model, ExpenditureModel expenditureModel, int id,@RequestParam String method){
+        Project project=projectService.findById(id);
+        List<Expenditure> expenditures=expenditureModel.getExpenditures();
+        Set<Expenditure> expenditureSet=new HashSet<>();
+        Set<Expenditure> oldExpenditures=project.getExpenditures();
+//        for(Expenditure expenditure: expenditures){
+//            logger.info("expenditure.Money:"+expenditure.getMoney());
+//        }
+        if(oldExpenditures.size()!=0){
+            expenditureService.deleteExpenditures(oldExpenditures);
+        }
+        for(Expenditure expenditure:expenditures){
+            expenditureSet.add(expenditure);
+        }
+        project.setExpenditures(expenditureSet);
+        project.setCreated(true);
+        projectService.projectSave(project);
+        model.addAttribute("project",project);
+        if(method.equals("edit")){
+            model.addAttribute("message","保存成功");
+            return "/project/edit/step5";
+        }else{
+            return "/project/apply/step5";
+        }
+    }
     @GetMapping("/list")
     public String projectAppling( Model model){
 
@@ -103,16 +284,20 @@ public class ProjectController {
                 model.addAttribute("projects",projects);
 
                 for (Project project:projects){
-                    System.out.println("isPublish:======="+project.isPublished());
+                    System.out.println("isPublish:======="+project.isNeedCheck());
                 }
             }else if(roleCheck.isCpgroup(role.getName())){
-                List<Project> projects=projectService.findAll();
+                List<Project> projects=projectService.findProjectCheckWithCpgrop("list");
+                model.addAttribute("projects",projects);
+            }else if(roleCheck.isDsoAdmin(role.getName())){
+                List<Project> projects=projectService.findProjectCheckWithCpgrop("list");
                 model.addAttribute("projects",projects);
             }else if(roleCheck.isAdviser(role.getName())){
-                List<Project> projects=projectService.findByAcademyId(user.getAcademy().getId());
+                logger.info("userId:::::"+user.getId());
+                List<Project> projects=projectService.findProjectList(user.getId());
                 model.addAttribute("projects",projects);
             }else if(roleCheck.isFpgroup(role.getName())){
-                List<Project> projects=projectService.findByAcademyId(user.getAcademy().getId());
+                List<Project> projects=projectService.findProjectCheckWithFpgroup(user.getAcademy(),"list");
                 model.addAttribute("projects",projects);
             }
         }else{
@@ -125,8 +310,30 @@ public class ProjectController {
     }
     @GetMapping("/check")
     public String checking(@RequestParam int id,Model model){
+        String advicement=null;
+        boolean checked=false;
+        RoleCheck roleCheck=new RoleCheck();
         Project project=projectService.findById(id);
+        String name=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(name);
+        Set<Role> roles=user.getRoles();
+        Role role=new Role();
+        for (Role _role:roles){
+            role=_role;
+        }
+        if(roleCheck.isAdviser(role.getName())){
+            advicement=project.getAdviserAdvice();
+            checked=project.isAdviserIsCheck();
+        }else if(roleCheck.isCpgroup(role.getName())){
+            advicement=project.getCollegeAdvice();
+            checked=project.isCollegeIsCheck();
+        }else if(roleCheck.isFpgroup(role.getName())){
+            advicement=project.getAcademyAdvice();
+            checked=project.isAcademyIsCheck();
+        }
         model.addAttribute("project",project);
+        model.addAttribute("advicecontent",advicement);
+        model.addAttribute("checked",checked);
         return "/project/projectcheck";
     }
     @PostMapping("/checked")
@@ -148,7 +355,6 @@ public class ProjectController {
             try {
                 projectService.save(project);
                 model.addAttribute("message", ProjectCheckMessage.SUCCESS);
-
                 model.addAttribute("advicecontent",advicecontent);
                 model.addAttribute("checked",checked);
             } catch (Exception e) {
@@ -218,11 +424,13 @@ public class ProjectController {
         List<Project> projects=new ArrayList<>();
         if(user.getAcademy()!=null){
             if(roleCheck.isAdviser(role.getName())){
-                projects=projectService.findByAcademyIdAndAdviserIsCheck(user.getAcademy().getId(),false);
+                projects=projectService.findProjectNeedCheckWithAdviser(user.getId());
             }else if(roleCheck.isFpgroup(role.getName())){
-                projects=projectService.findByAcademyIdAndAdviserIsCheckAndAcademyIsCheck(user.getAcademy().getId(),true,false);
+                projects=projectService.findProjectCheckWithFpgroup(user.getAcademy(),"check");
             }else if(roleCheck.isCpgroup(role.getName())){
-                projects=projectService.findByAcademyIsCheckAndCollegeIsCheck(true,false);
+                projects=projectService.findProjectCheckWithCpgrop("check");
+            }else if(roleCheck.isDsoAdmin(role.getName())){
+                projects=projectService.findProjectCheckWithCpgrop("check");
             }
         }else{
             model.addAttribute("message","请先配置个人信息");
@@ -241,10 +449,14 @@ public class ProjectController {
     }
 
     @GetMapping("/edit")
-    public String projectEditing(@RequestParam int id,Model model){
-        Project project=projectService.findById(id);
-        model.addAttribute("project",project);
-        return "/project/projectEdit";
+    public String projectEditing(@RequestParam int id,HttpServletResponse response){
+
+        try {
+            response.sendRedirect("/project/applystep1?method=edit&&id="+id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }
 
@@ -254,7 +466,6 @@ public class ProjectController {
         User user=userService.findUserByUsername(name);
         Project project=projectService.findById(id);
         if(user.getAcademy()!=null){
-            project.setProjectInfo(content);
             project.setAcademy(user.getAcademy());
             projectService.save(project);
             model.addAttribute("message","修改成功");
@@ -264,6 +475,58 @@ public class ProjectController {
         }
         model.addAttribute("project",projectService.findById(id));
         return "/project/projectEdit";
+    }
+    @GetMapping("/applying")
+    public String projectApplying(Model model){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(username);
+        List<Project> projects=new ArrayList<>();
+        projects=projectService.findByUseridAndNeedCheck(user.getId(),true);
+        model.addAttribute("projects",projects);
+        return "/project/projectapplying";
+    }
+    @GetMapping("/success")
+    public String projectSuccess(Model model){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(username);
+        List<Project> projects=new ArrayList<>();
+        projects=projectService.findByUserIdAndPublished(user.getId(),true);
+        model.addAttribute("projects",projects);
+        return "/project/projectsuccess";
+    }
+    @GetMapping("/publish")
+    public String projectPublish(Model model){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(username);
+        List<Project> projects=new ArrayList<>();
+        projects=projectService.findByAdviserIsCheckAndAcademyIsCheckAndCollegeIsCheckAndPublished(true,true,true,false);
+        model.addAttribute("projects",projects);
+        return "/project/projectpublish";
+    }
+    @GetMapping("/delete")
+    public void projectDelete(Model model,@RequestParam int id,HttpServletResponse response){
+        if(id>0){
+            Project project=projectService.findById(id);
+            project.setUser(null);
+            projectService.projectDelete(project);
+        }
+        try {
+            response.sendRedirect("/project/list");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/needCheck")
+    public void projectNeedCheck(@RequestParam int id,HttpServletResponse response){
+        Project project=projectService.findById(id);
+        project.setNeedCheck(true);
+        projectService.projectSave(project);
+        try {
+            response.sendRedirect("/project/list");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

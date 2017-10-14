@@ -1,5 +1,8 @@
 <#include "../common/layer.ftl">
-<@html page_title="角色配置">
+<@head page_title="项目列表"/>
+<@css></@css>
+<@js></@js>
+<@body>
 <div class="row">
     <#include "../common/left_menu.ftl"/>
     <@left_menu/>
@@ -42,18 +45,54 @@
                                     <#list projects as project>
                                     <tr>
                                         <td>${project.id!}</td>
-                                        <td>${project.projectName!}<#if !project.published>&nbsp<span class="label label-info">申请中</span></#if></td>
+                                        <td>${project.projectName!}
+                                            <#if rolename=="student">
+                                                <#if project.needCheck&&!project.adviserIsCheck>
+                                                    &nbsp<span class="label label-info">申请中</span>
+                                                <#elseif project.needCheck&&!project.collegeIsCheck>
+                                                    &nbsp<span class="label label-info">申请中</span>
+                                                <#elseif project.needCheck&&!project.academyIsCheck>
+                                                    &nbsp<span class="label label-info">申请中</span>
+                                                <#elseif project.needCheck&&project.adviserIsCheck&&project.collegeIsCheck&&project.academyIsCheck>
+                                                    &nbsp<span class="label label-info">已审核</span>
+                                                </#if>
+                                            </#if>
+                                            <#if rolename=="adviser">
+                                                <#if project.needCheck&&!project.adviserIsCheck>
+                                                    &nbsp<span class="label label-info">审核中</span>
+                                                <#else>
+                                                    &nbsp<span class="label label-info">已审核</span>
+                                                </#if>
+                                            </#if>
+                                            <#if rolename=="cpgroup"||rolename=="ctsecretary">
+                                                <#if project.needCheck&&!project.collegeIsCheck>
+                                                    &nbsp<span class="label label-info">审核中</span>
+                                                <#else>
+                                                    &nbsp<span class="label label-info">已审核</span>
+                                                </#if>
+                                            </#if>
+                                            <#if rolename=="fpgroup">
+                                                <#if project.needCheck&&!project.academyIsCheck>
+                                                    &nbsp<span class="label label-info">审核中</span>
+                                                <#else>
+                                                    &nbsp<span class="label label-info">已审核</span>
+                                                </#if>
+                                            </#if>
+                                        </td>
                                         <td>${project.user.username!}</td>
                                         <td>${project.createTime!}</td>
 
                                         <td>
-                                            <#if rolename=="student"><a class="btn btn-primary" href="/project/find?id=${project.id}">查看项目</a></#if>
+                                            <#if rolename=="student">
+                                                <a class="btn btn-primary" href="/project/find?id=${project.id}">查看项目</a>
+                                                <a class="btn btn-primary" href="/project/needCheck?id=${project.id}">申请审核</a>
+                                            </#if>
                                             <#if rolename=="dsoAdmin"||rolename=="adviser"||rolename=="cpgroup"||rolename=="fpgroup"||rolename=="ctsecretary">
                                                 <a class="btn btn-primary" href="/project/check?id=${project.id}">审核项目</a>
                                             </#if>
                                             <#if rolename=="student">
                                                 <a class="btn btn-info" href="/project/edit?id=${project.id}">修改</a>
-                                                <a class="btn btn-warning" href="#">删除</a>
+                                                <a class="btn btn-warning" href="/project/delete?id=${project.id}">删除</a>
                                             </#if>
                                         </td>
                                     </tr>
@@ -68,4 +107,4 @@
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
-</@html>
+</@body>

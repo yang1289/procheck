@@ -1,4 +1,3 @@
-<#macro html page_title page_tab="">
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -17,20 +16,21 @@
         http://twitter.com/halalit_usman
         ===
     -->
-    
+<#macro head  page_title page_tab="">
     <meta charset="utf-8">
     <title>${page_title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
     <meta name="author" content="Muhammad Usman">
-
+</#macro>
+<#macro css>
     <!-- The styles -->
     <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">
-    
+
     <link href="/static/css/charisma-app.css" rel="stylesheet">
     <link href='/static/css/fullcalendar/fullcalendar.css' rel='stylesheet'>
     <link href='/static/css/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print'>
-    
+
     <link href='/static/css/chosen/chosen.min.css' rel='stylesheet'>
     <link href='/static/css/colorbox/colorbox.css' rel='stylesheet'>
     <link href='/static/css/responsive-tables/responsive-tables.css' rel='stylesheet'>
@@ -42,7 +42,9 @@
     <link href='/static/css/jquery.iphone.toggle.css' rel='stylesheet'>
     <link href='/static/css/uploadify.css' rel='stylesheet'>
     <link href='/static/css/animate.min.css' rel='stylesheet'>
-
+    <#nested>
+</#macro>
+<#macro js>
     <!-- jQuery -->
     <script src="/static/js/jquery.min.js"></script>
 
@@ -51,7 +53,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <!-- The fav icon 
+    <!-- The fav icon
     <link rel="shortcut icon" href="img/favicon.ico">-->
     <!-- external javascript -->
 
@@ -97,23 +99,20 @@
     <!-- application script for Charisma demo -->
     <script src="/static/js/charisma.js"></script>
 
+    <#nested>
+</#macro>
 </head>
 
+
+<#macro body page_tab="">
 <body>
-<#include "./header.ftl">
-<@header page_tab=page_tab/>
+    <#include "./header.ftl">
+    <@header page_tab=page_tab/>
 <div class="ch-container">
-	<#nested/>
-	
-	
+    <#nested>
 <#include "./footer.ftl"/>
 <@footer/>
 </div>
-
-
-
-
-
 </body>
-</html>
 </#macro>
+</html>

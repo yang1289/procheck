@@ -1,5 +1,8 @@
 <#include "../common/layer.ftl">
-<@html page_title="查看项目">
+<@head page_title="查看项目"/>
+<@css></@css>
+<@js></@js>
+<@body>
 <div class="row">
     <#include "../common/left_menu.ftl"/>
     <@left_menu/>
@@ -32,8 +35,98 @@
                         </div>
                         <div class="form-group">
                             <label form="role">项目详情</label>
-                            <div>
-                            ${project.projectInfo!}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>指导老师:<#if project.adviser??>${project.adviser.chineseName!}|${project.adviser.academy.name!}</#if></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>职称:${project.jobTitle!}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>实验室名称:${project.libName!}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>所属教学单位:${project.teachUnit!}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>申请人名单:</label></div>
+                                <div class="col-md-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>申请人姓名</td><td>申请人专业</td><td>申请人学号</td><td>申请人班级</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <#list project.applyUsers as applyuser>
+                                            <tr>
+                                                <td>${applyuser.applyName!}</td><td>${applyuser.applyMajor!}</td><td>${applyuser.applyNumber!}</td><td>${applyuser.applyGrade!}</td>
+                                            </tr>
+                                            </#list>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>研究现状:</label></div>
+                                <div class="col-md-12"><textarea class="form-control" readonly>${project.searchCondition!}</textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>研究方案:</label></div>
+                                <div class="col-md-12"><textarea class="form-control" readonly>${project.searchPlan!}</textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>创新点:</label></div>
+                                <div class="col-md-12"><textarea class="form-control" readonly>${project.createPoint!}</textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>研究工作的条件保障（研究室，研究基地等）:</label></div>
+                                <div class="col-md-12"><textarea class="form-control" readonly>${project.searchConditionSupport!}</textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><label>拟提供成果及成果形式:</label></div>
+                                <div class="col-md-12"><textarea class="form-control" readonly>${project.achievenmentMethod!}</textarea></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><label>计划事件:</label></div>
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>计划时间</td><td>计划事件</td><td>计划备注</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <#list project.progressPlans as progressPlan>
+                                        <tr>
+                                            <td>${progressPlan.time!}</td><td>${progressPlan.event!}</td><td>${progressPlan.remark!}</td>
+                                        </tr>
+                                        </#list>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><label>经费说明:</label></div>
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>经费说明</td><td>经费</td><td>备注</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <#list project.expenditures as expnediture>
+                                        <tr>
+                                            <td>${expnediture.description!}</td><td>${expnediture.money!}</td><td>${expnediture.remark!}</td>
+                                        </tr>
+                                        </#list>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -107,4 +200,4 @@
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
-</@html>
+</@body>

@@ -52,7 +52,14 @@ public class RoleCheck {
     }
 
     public boolean isCpgroup(String name){
-        if(name.equals(CPGROUP)||name.equals(DSOADMIN)){
+        if(name.equals(CPGROUP)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean isDsoAdmin(String name){
+        if(name.equals(DSOADMIN)){
             return true;
         }else{
             return false;

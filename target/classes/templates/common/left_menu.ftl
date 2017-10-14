@@ -100,6 +100,19 @@
                             </ul>
                         </li>
                       </#if>
+
+                        <#if _roles?seq_contains("dataManage:list")>
+                            <li class="accordion">
+                                <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 数据备份 </span></a>
+                                <ul class="nav nav-pills nav-stacked">
+                                    <#list permissions as permission>
+                                        <#if permission.name?contains("dataManage")>
+                                            <li><a href="${permission.url!}"> ${permission.description}</a></li>
+                                        </#if>
+                                    </#list>
+                                </ul>
+                            </li>
+                        </#if>
                       
                     </ul>
                     

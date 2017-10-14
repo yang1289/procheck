@@ -1,5 +1,8 @@
 <#include "../common/layer.ftl">
-<@html page_title="账户列表">
+<@head page_title="用户列表"/>
+<@css></@css>
+<@js></@js>
+<@body>
 <div class="row">
 	<#include "../common/left_menu.ftl"/>
  	<@left_menu/>
@@ -47,8 +50,7 @@
 		        				<td><#if user.url??>${user.url}</#if></td>
 		        				<td>
 		        					<a class="btn btn-primary" href="/user/role/edit?id=${user.id}">角色配置</a>
-		        					<a class="btn btn-info" href="/user/edit?id=${user.id}">修改</a>
-		        					<a class="btn btn-warning" href="/user/edit?id=${user.id}">删除</a>
+
 		        				</td>
 		        			</tr>
 		        		</#list>
@@ -59,5 +61,5 @@
    <!-- content ends -->
 	</div><!--/#content.col-md-0-->
 </div>
- </@html>
+ </@body>
   

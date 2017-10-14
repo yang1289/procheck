@@ -283,7 +283,7 @@ public class DocUtil {
     public void createWord(Project project, HttpServletRequest request, HttpServletResponse response){
         try {
             //word内容
-            String content="<html><body>"+project.getProjectInfo()+"</body></html>";
+            String content="<html><body>"+"</body></html>";
             byte b[] = content.getBytes("utf-8");  //这里是必须要设置编码的，不然导出中文就会乱码。
             ByteArrayInputStream bais = new ByteArrayInputStream(b);//将字节数组包装到流中
                 /*
@@ -311,7 +311,7 @@ public class DocUtil {
     }
 
     public void createWordX(Project project, HttpServletRequest request, HttpServletResponse response){
-        String content="<html><body>"+project.getProjectInfo()+"</body></html>";
+        String content="<html><body>"+"</body></html>";
         XWPFDocument doc = new XWPFDocument();
         XWPFParagraph citiaoP = doc.createParagraph();
         XWPFRun citiaoR = citiaoP.createRun();

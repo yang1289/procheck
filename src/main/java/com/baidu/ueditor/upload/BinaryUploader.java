@@ -59,7 +59,7 @@ public class BinaryUploader {
 					temp+=savePathBySplit_temp[i];
 				}
 			}
-			String pathTemp = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+			String pathTemp = (String) conf.get("rootPath");
 			pathTemp=pathTemp+temp;
 			System.out.println(pathTemp+","+fileName);
 			System.out.println(new File(pathTemp).exists());

@@ -1,5 +1,8 @@
 <#include "../common/layer.ftl">
-<@html page_title="配置权限">
+<@head page_title="配置权限"/>
+<@css></@css>
+<@js></@js>
+<@body>
 <div class="row">
 	<#include "../common/left_menu.ftl"/>
  	<@left_menu/>
@@ -83,4 +86,4 @@
    	<!-- content ends -->
 	</div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
-</@html>>
+</@body>>
