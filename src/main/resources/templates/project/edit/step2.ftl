@@ -53,14 +53,14 @@
                                     <#if project.applyUsers??&&(project.applyUsers?size>=1)>
                                         <#list project.applyUsers as applyuser>
                                             <tr id="user_${applyuser_index}">
-                                                <td><input class="form-control" name="applyusers[0].applyName" type="text" value="${applyuser.applyName}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyMajor" type="text" value="${applyuser.applyMajor}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyNumber" type="text" value="${applyuser.applyNumber}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyGrade" type="text" value="${applyuser.applyGrade}"/></td>
+                                                <td><input class="form-control" name="applyusers[${applyuser_index}].applyName" type="text" value="${applyuser.applyName!}"/></td>
+                                                <td><input class="form-control" name="applyusers[${applyuser_index}].applyMajor" type="text" value="${applyuser.applyMajor!}"/></td>
+                                                <td><input class="form-control" name="applyusers[${applyuser_index}].applyNumber" type="text" value="${applyuser.applyNumber!}"/></td>
+                                                <td><input class="form-control" name="applyusers[${applyuser_index}].applyGrade" type="text" value="${applyuser.applyGrade!}"/></td>
                                                 <#if !applyuser_has_next>
                                                     <td>
                                                         <button class="btn btn-info" onclick="addUser(${applyuser_index})" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <button class="btn btn-warning" onclick="deleteUser(${applyuser_index})"type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        <button class="btn btn-warning" <#if applyuser_index!=0>onclick="deleteUser(${applyuser_index})"</#if> type="button"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </td>
                                                 <#else>
                                                     <td></td>

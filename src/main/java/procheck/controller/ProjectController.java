@@ -137,26 +137,46 @@ public class ProjectController {
     @PostMapping("/applystep2")
     public String saveSteptwo(Model model, ApplyUserModel applyUserModel,int id,@RequestParam String method){
         if(applyUserModel.getApplyusers()!=null){
-        logger.info("applyuser.size:::::::="+ applyUserModel.getApplyusers().size());
-        Project project=projectService.findById(id);
-        List<ApplyUser> applyUserList=applyUserModel.getApplyusers();
-        Set<ApplyUser> applyUsers=new HashSet<>();
-        Set<ApplyUser> oldApplyUsers=project.getApplyUsers();
-        if(oldApplyUsers.size()!=0){
-            applyUserService.deleteApplyUsers(oldApplyUsers);
-        }
-        for(ApplyUser applyUser:applyUserList){
-                applyUsers.add(applyUser);
-        }
-        project.setApplyUsers(applyUsers);
-        projectService.projectSave(project);
-        model.addAttribute("project",project);
-        if(method.equals("edit")){
-            model.addAttribute("message","保存成功");
-            return "/project/edit/step2";
-        }else{
-            return "/project/apply/step3";
-        }
+            logger.info("applyuser.size:::::::="+ applyUserModel.getApplyusers().size());
+            Project project=projectService.findById(id);
+            List<ApplyUser> applyUserList=applyUserModel.getApplyusers();
+            boolean isNotEmpty=false;
+            boolean isLoop;
+            for(ApplyUser applyUser:applyUserList){
+                logger.info("applyUser.getApplyName++++++++"+applyUser.getApplyName());
+                if("".equals(applyUser.getApplyName())||"".equals(applyUser.getApplyNumber())||" ".equals(applyUser.getApplyMajor())||"".equals(applyUser.getApplyGrade())){
+                    isNotEmpty= false;
+                    isLoop=true;
+                }else{
+                    isLoop=false;
+                    isNotEmpty=true;
+                }
+                if(isLoop){
+                    break;
+                }
+            }
+            if(isNotEmpty) {
+                Set<ApplyUser> applyUsers = new HashSet<>();
+                Set<ApplyUser> oldApplyUsers = project.getApplyUsers();
+                if (oldApplyUsers.size() != 0) {
+                    applyUserService.deleteApplyUsers(oldApplyUsers);
+                }
+                for (ApplyUser applyUser : applyUserList) {
+                    applyUsers.add(applyUser);
+                }
+                project.setApplyUsers(applyUsers);
+                projectService.projectSave(project);
+                model.addAttribute("message","保存成功");
+            }else{
+                model.addAttribute("message","没有填写小组成员，请填写");
+            }
+            model.addAttribute("project",project);
+            if(method.equals("edit")){
+
+                return "/project/edit/step2";
+            }else{
+                return "/project/apply/step3";
+            }
         }else{
             model.addAttribute("message","申请人不能为空");
             return "/project/apply/step2";
@@ -209,19 +229,38 @@ public class ProjectController {
     public String saveStepfour(Model model, ProgressPlanModel progressPlanModel,int id,@RequestParam String method){
         Project project=projectService.findById(id);
         List<ProgressPlan> progressPlans=progressPlanModel.getProgressPlans();
-        Set<ProgressPlan> progressPlanSet=new HashSet<>();
-        Set<ProgressPlan> oldProgressPlans=project.getProgressPlans();
-        if(oldProgressPlans.size()!=0){
-            progressPlanService.deleteProgressPlans(oldProgressPlans);
-        }
+        boolean isEmpty=false;
+        boolean isloop;
         for(ProgressPlan progressPlan:progressPlans){
-            progressPlanSet.add(progressPlan);
+            if("".equals(progressPlan.getTime())||"".equals(progressPlan.getEvent())){
+                isEmpty=false;
+                isloop=true;
+            }else{
+                isEmpty=true;
+                isloop=false;
+            }
+            if(isloop){
+                break;
+            }
         }
-        project.setProgressPlans(progressPlanSet);
-        projectService.projectSave(project);
+        if(isEmpty){
+            Set<ProgressPlan> progressPlanSet=new HashSet<>();
+            Set<ProgressPlan> oldProgressPlans=project.getProgressPlans();
+            if(oldProgressPlans.size()!=0){
+                progressPlanService.deleteProgressPlans(oldProgressPlans);
+            }
+            for(ProgressPlan progressPlan:progressPlans){
+                progressPlanSet.add(progressPlan);
+            }
+            project.setProgressPlans(progressPlanSet);
+            projectService.projectSave(project);
+            model.addAttribute("message","保存成功");
+        }else{
+            model.addAttribute("message","没有填完信息，前两项必填");
+        }
+
         model.addAttribute("project",project);
         if(method.equals("edit")){
-            model.addAttribute("message","保存成功");
             return "/project/edit/step4";
         }else{
             return "/project/apply/step5";
@@ -244,23 +283,41 @@ public class ProjectController {
     public String saveStepfive(Model model, ExpenditureModel expenditureModel, int id,@RequestParam String method){
         Project project=projectService.findById(id);
         List<Expenditure> expenditures=expenditureModel.getExpenditures();
-        Set<Expenditure> expenditureSet=new HashSet<>();
-        Set<Expenditure> oldExpenditures=project.getExpenditures();
+        boolean isEmpty=false;
+        boolean isLoop;
+        for(Expenditure expenditure:expenditures){
+            if("".equals(expenditure.getDescription())||"".equals(expenditure.getMoney())){
+                isEmpty=false;
+                isLoop=true;
+            }else{
+                isEmpty=true;
+                isLoop=false;
+            }
+            if(isLoop){
+                break;
+            }
+        }
+        if(isEmpty){
+            Set<Expenditure> expenditureSet=new HashSet<>();
+            Set<Expenditure> oldExpenditures=project.getExpenditures();
 //        for(Expenditure expenditure: expenditures){
 //            logger.info("expenditure.Money:"+expenditure.getMoney());
 //        }
-        if(oldExpenditures.size()!=0){
-            expenditureService.deleteExpenditures(oldExpenditures);
+            if(oldExpenditures.size()!=0){
+                expenditureService.deleteExpenditures(oldExpenditures);
+            }
+            for(Expenditure expenditure:expenditures){
+                expenditureSet.add(expenditure);
+            }
+            project.setExpenditures(expenditureSet);
+            project.setCreated(true);
+            projectService.projectSave(project);
+            model.addAttribute("message","保存成功");
+        }else{
+            model.addAttribute("message","前两项必须填写");
         }
-        for(Expenditure expenditure:expenditures){
-            expenditureSet.add(expenditure);
-        }
-        project.setExpenditures(expenditureSet);
-        project.setCreated(true);
-        projectService.projectSave(project);
         model.addAttribute("project",project);
         if(method.equals("edit")){
-            model.addAttribute("message","保存成功");
             return "/project/edit/step5";
         }else{
             return "/project/apply/step5";

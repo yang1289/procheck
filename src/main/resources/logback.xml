@@ -3,7 +3,7 @@
     <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
     <!-- 项目的appid -->
     <property name="APP_ID" value="proehck"/>
-    <property name="LOG_PATH" value="D:/workstation/procheck/log"/>
+    <property name="LOG_PATH" value="/home/yangqiang/www/procheck/log"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>

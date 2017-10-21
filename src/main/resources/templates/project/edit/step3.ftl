@@ -2,19 +2,13 @@
 
 <@head page_title="修改项目-步骤三"/>
 <@css>
-<link href="/static/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
-<link href="/static/froala_editor/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-<link href="/static/froala_editor/css/themes/gray.min.css" rel="stylesheet" type="text/css" />
-<link href="/static/froala_editor/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+
 </@css>
 <@js>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
-
-<!-- Include Editor JS files. -->
-<script type="text/javascript" src="/static/froala_editor/js/froala_editor.pkgd.min.js"></script>
-<script type="text/javascript" src="/static/froala_editor/js/languages/zh_cn.js"></script>
+<!-- 配置文件 -->
+<script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/static/js/ueditor/ueditor.all.js"></script>
 </@js>
 <@body>
 
@@ -57,67 +51,95 @@
                         <form role="form" id="step3" method="post" action="/project/applystep3?method=edit">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <#if project??><input type="hidden" name="id" value="${project.id}"/></#if>
-                            <div class="form-group">
-                                <label for="">研究现状</label>
-                                    <#if project??>
-                                        <#if project.searchCondition??>
-                                            <textarea id="searchCondition"  name="searchCondition" class="form-control froalaEdit" rows="3">${project.searchCondition}</textarea>
+                            <ul class="nav nav-pills" id="mytab" role="tablist">
+                                <li class="active"><a href="#researchConditionDiv" data-toggle="pill" aria-controls="researchConditionDiv" role="tab">研究现状</a></li>
+                                <li><a href="#researchPlanDiv" data-toggle="pill" aria-controls="researchPlanDiv" role="tab">研究方案</a></li>
+                                <li><a href="#createPintDiv" data-toggle="pill" aria-controls="createPintDiv" role="tab">创新点</a></li>
+                                <li><a href="#researchConditionSupportDiv" data-toggle="pill" aria-controls="researchConditionSupportDiv" role="tab">研究工作的条件保障（研究室，研究基地等）</a></li>
+                                <li><a href="#achievementMethodDiv" data-toggle="pill" aria-controls="achievementMethodDiv" role="tab">拟提供成果及成果形式</a></li>
+                            </ul>
+                            <div id="mytabContent" class="tab-content">
+                                <div id="researchConditionDiv" class="tab-pane fade in active">
+                                    <div class="form-group">
+                                        <!--<label for="">研究现状</label>-->
+                                        <br/>
+                                        <#if project??>
+                                            <#if project.searchCondition??>
+                                                <script name="searchCondition" id="searchCondition" type="text/plain">
+                                                    ${project.searchCondition}
+                                                </script>
+                                                <#--<textarea id="searchCondition" name="searchCondition" >${project.searchCondition}</textarea>-->
+                                            <#else>
+                                                <script name="searchCondition" id="searchCondition" type="text/plain"></script>
+                                            </#if>
                                         <#else>
-                                            <textarea id="searchCondition" name="searchCondition" class="form-control froalaEdit" rows="3"></textarea>
+                                            <script id="searchCondition" name="searchCondition" type="text/plain"></script>
                                         </#if>
-                                    <#else>
-                                        <textarea id="searchCondition" name="searchCondition" class="form-control froalaEdit" rows="3"></textarea>
-                                    </#if>
-                            </div>
-                            <div class="form-group">
-                                <label for="">研究方案</label>
-                                    <#if project??>
-                                        <#if project.searchPlan??>
-                                            <textarea id="searchPlan" name="searchPlan" class="form-control froalaEdit" rows="3">${project.searchPlan}</textarea>
+                                    </div>
+                                </div>
+                                <div  class="tab-pane fade" id="researchPlanDiv">
+                                    <div class="form-group">
+                                        <#--<label for="">研究方案</label>-->
+                                        <br/>
+                                        <#if project??>
+                                            <#if project.searchPlan??>
+                                                <script type="text/plain" id="searchPlan" name="searchPlan">${project.searchPlan}</script>
+                                            <#else>
+                                                <script type="text/plain" id="searchPlan" name="searchPlan"></script>
+                                            </#if>
                                         <#else>
-                                            <textarea id="searchPlan" name="searchPlan" class="form-control froalaEdit" rows="3"></textarea>
+                                            <script type="text/plain" id="searchPlan" name="searchPlan"></script>
                                         </#if>
-                                    <#else>
-                                        <textarea id="searchPlan" name="searchPlan" class="form-control froalaEdit" rows="3"></textarea>
-                                    </#if>
+                                    </div>
+                                </div>
+                                <div id="createPintDiv" class="tab-pane fade">
+                                    <div class="form-group">
+                                        <#--<label for="">创新点</label>-->
+                                        <br/>
+                                        <#if project??>
+                                            <#if project.createPoint??>
+                                                <script type="text/plain" id="createPoint" name="createPoint" class=" myEditor">${project.createPoint}</script>
+                                            <#else>
+                                                <script type="text/plain" id="createPoint" name="createPoint" class=" myEditor"></script>
+                                            </#if>
+                                        <#else>
+                                            <script type="text/plain" id="createPoint" name="createPoint"  ></script>
+                                        </#if>
+                                    </div>
+                                </div>
 
+                                <div id="researchConditionSupportDiv" class="tab-pane fade">
+                                    <div class="form-group">
+                                        <#--<label for="">研究工作的条件保障（研究室，研究基地等）</label>-->
+                                        <br/>
+                                        <#if project??>
+                                            <#if project.searchConditionSupport??>
+                                                <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport">${project.searchConditionSupport}</script>
+                                            <#else>
+                                                <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport"></script>
+                                            </#if>
+                                        <#else>
+                                            <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport"></script>
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div id="achievementMethodDiv" class="tab-pane fade">
+                                    <div class="form-group">
+                                        <#--<label for="">拟提供成果及成果形式</label>-->
+                                        <br/>
+                                        <#if project??>
+                                            <#if project.achievenmentMethod??>
+                                                <script type="text/plain" id="achievementMethod" name="achievenmentMethod">${project.achievenmentMethod}</script>
+                                            <#else>
+                                                <script type="text/plain" id="achievementMethod" name="achievenmentMethod"></script>
+                                            </#if>
+                                        <#else>
+                                            <script type="text/plain" id="achievementMethod" name="achievenmentMethod"></script>
+                                        </#if>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="">创新点</label>
-                                <#if project??>
-                                    <#if project.createPoint??>
-                                        <textarea id="createPoint" name="createPoint" class="form-control froalaEdit" rows="3">${project.createPoint}</textarea>
-                                    <#else>
-                                        <textarea id="createPoint" name="createPoint" class="form-control froalaEdit" rows="3"></textarea>
-                                    </#if>
-                                <#else>
-                                    <textarea id="createPoint" name="createPoint" class="form-control froalaEdit" rows="3"></textarea>
-                                </#if>
-                            </div>
-                            <div class="form-group">
-                                <label for="">研究工作的条件保障（研究室，研究基地等）</label>
-                                <#if project??>
-                                    <#if project.searchConditionSupport??>
-                                        <textarea id="searchConditionSupport" name="searchConditionSupport" class="form-control froalaEdit" rows="3">${project.searchConditionSupport}</textarea>
-                                    <#else>
-                                        <textarea id="searchConditionSupport" name="searchConditionSupport" class="form-control froalaEdit" rows="3"></textarea>
-                                    </#if>
-                                <#else>
-                                    <textarea id="searchConditionSupport" name="searchConditionSupport" class="form-control froalaEdit" rows="3"></textarea>
-                                </#if>
-                            </div>
-                            <div class="form-group">
-                                <label for="">拟提供成果及成果形式</label>
-                                <#if project??>
-                                    <#if project.achievenmentMethod??>
-                                        <textarea id="achievementMethod" name="achievenmentMethod" class="form-control froalaEdit" rows="3">${project.achievenmentMethod}</textarea>
-                                    <#else>
-                                        <textarea id="achievementMethod" name="achievenmentMethod" class="form-control froalaEdit" rows="3"></textarea>
-                                    </#if>
-                                <#else>
-                                    <textarea id="achievenmentMethod" name="achievenmentMethod" class="form-control froalaEdit" rows="3"></textarea>
-                                </#if>
-                            </div>
+
                             <div class="form-group col-md-12">
                                 <button type="button" id="baseapply" onclick="saveStep3()" class="btn btn-primary">保存</button>
                             </div>
@@ -147,22 +169,44 @@
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
     <script>
-        $(function(){
-           $(".froalaEdit").froalaEditor({
-               theme:'gray',
-               language: 'zh_cn',
-               imageManagerLoadURL:"/froala/image_load",
-               imageUploadURL:"/froala/image_upload",
-               imageManagerDeleteURL:"/froala/image_delete",
-               imageManagerDeleteMethod: "POST",
-               imageUploadParams:{
-                    ${_csrf.parameterName}:"${_csrf.token}"
-               },
-                imageManagerDeleteParams:{
-                    ${_csrf.parameterName}:"${_csrf.token}"
-                }
-           });
-        })
+        var ue1=UE.getEditor("searchCondition");
+        ue1.ready(function(){
+            ue1.execCommand("serverparam",{
+                "${_csrf.parameterName}":"${_csrf.token}"
+            })
+        });
+
+        var ue2=UE.getEditor("searchPlan");
+        ue2.ready(function(){
+            ue2.execCommand("serverparam",{
+                "${_csrf.parameterName}":"${_csrf.token}"
+            })
+        });
+
+
+        var ue3=UE.getEditor("createPoint");
+        ue3.ready(function(){
+            ue3.execCommand("serverparam",{
+                "${_csrf.parameterName}":"${_csrf.token}"
+            })
+        });
+
+
+        UE.getEditor("searchConditionSupport").ready(function(){
+            this.execCommand("serverparam",{
+                "${_csrf.parameterName}":"${_csrf.token}"
+            })
+        });
+
+
+        UE.getEditor("achievementMethod").ready(function(){
+            this.execCommand("serverparam",{
+                "${_csrf.parameterName}":"${_csrf.token}"
+            })
+        });
+
+
     </script>
+
 </div><!--/fluid-row-->
 </@body>

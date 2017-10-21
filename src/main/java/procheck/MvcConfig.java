@@ -29,6 +29,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter{
 		String imagePath="file:"+siteConfig.getImagePath();
 		log.info("imagePath"+imagePath);
 		registry.addResourceHandler("/images/**").addResourceLocations(imagePath);
+		registry.addResourceHandler("/upload/**").addResourceLocations("file:"+siteConfig.getUploadPath()+siteConfig.getUploadName());
 		super.addResourceHandlers(registry);
 	}
 

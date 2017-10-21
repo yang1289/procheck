@@ -1,7 +1,10 @@
 package com.baidu.ueditor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +19,7 @@ public class PathFormat {
 	private static final String MINUTE = "ii";
 	private static final String SECOND = "ss";
 	private static final String RAND = "rand";
+	private static final String USERNAME="username";
 	
 	private static Date currentDate = null;
 	
@@ -49,6 +53,7 @@ public class PathFormat {
 		return input.replace( "\\", "/" );
 		
 	}
+
 
 	public static String parse ( String input, String filename ) {
 	
@@ -100,6 +105,8 @@ public class PathFormat {
 			return PathFormat.getSecond();
 		} else if ( pattern.indexOf( PathFormat.RAND ) != -1 ) {
 			return PathFormat.getRandom( pattern );
+		}else if(pattern.indexOf(PathFormat.USERNAME)!=-1){
+			return PathFormat.getUserName(pattern);
 		}
 		
 		return pattern;
@@ -147,6 +154,11 @@ public class PathFormat {
 		
 		return ( Math.random() + "" ).replace( ".", "" ).substring( 0, length );
 		
+	}
+
+	private static String getUserName(String pattern){
+		String username= SecurityContextHolder.getContext().getAuthentication().getName();
+		return username;
 	}
 
 	public static void main(String[] args) {

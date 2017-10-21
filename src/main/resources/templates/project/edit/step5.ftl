@@ -54,12 +54,12 @@
                                         <#list project.expenditures as expnediture>
                                             <tr id="expenditure_${expnediture_index}">
                                                 <td><input class="form-control" name="expenditures[${expnediture_index}].description" type="text" value="${expnediture.description}"/></td>
-                                                <td><input class="form-control" name="expenditures[${expnediture_index}].money" type="text" value="${expnediture.money?c}"/></td>
+                                                <td><input class="form-control" name="expenditures[${expnediture_index}].money" type="number" value="${expnediture.money?c}"/></td>
                                                 <td><input class="form-control" name="expenditures[${expnediture_index}].remark" type="text" value="${expnediture.remark}"/></td>
                                                 <#if !expnediture_has_next>
                                                     <td>
                                                         <button class="btn btn-info" onclick="addExpenditure(${expnediture_index})" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <button class="btn btn-warning" onclick="deleteExpenditure(${expnediture_index})" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        <button class="btn btn-warning" <#if expnediture_index!=0>onclick="deleteExpenditure(${expnediture_index})"</#if> type="button"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </td>
                                                 <#else>
                                                     <td></td>
@@ -69,7 +69,7 @@
                                     <#else>
                                         <tr id="expenditure_0">
                                             <td><input class="form-control" name="expenditures[0].description" type="text" value=""/></td>
-                                            <td><input class="form-control" name="expenditures[0].money" type="text" value=""/></td>
+                                            <td><input class="form-control" name="expenditures[0].money" type="number" value="0"/></td>
                                             <td><input class="form-control" name="expenditures[0].remark" type="text" value=""/></td>
                                             <td>
                                                 <button class="btn btn-info" onclick="addExpenditure(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
