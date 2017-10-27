@@ -1,7 +1,12 @@
 <#include "../../common/layer.ftl">
 <@head page_title="申请项目-步骤四"/>
-<@css></@css>
-<@js></@js>
+<@css>
+<link href="/static/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</@css>
+<@js>
+<script type="text/javascript" src="/static/datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+</@js>
 <@body>
 <div class="row">
     <#include "../../common/left_menu.ftl"/>
@@ -49,42 +54,42 @@
                                     <#if project??>
                                         <#if project.progressPlans??&&(project.progressPlans?size>=1)>
                                             <#list project.progressPlans as progressPlan>
-                                                <tr id="progressplan_${progressPlan_index}">
-                                                    <td><input class="form-control" name="progressPlans[${progressPlan_index}].time" type="text" value="${progressPlan.time}"/></td>
-                                                    <td><input class="form-control" name="progressPlans[${progressPlan_index}].event" type="text" value="${progressPlan.event}"/></td>
-                                                    <td><input class="form-control" name="progressPlans[${progressPlan_index}].remark" type="text" value="${progressPlan.remark}"/></td>
-                                                    <#if !progressPlan_has_next>
-                                                        <td>
-                                                            <button class="btn btn-info" onclick="addProgressPlan(${progressPlan_index})" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                                                            <button class="btn btn-warning" onclick="deleteProgressPlan(${progressPlan_index})"type="button"><i class="glyphicon glyphicon-minus"></i></button>
-                                                        </td>
-                                                    <#else>
-                                                        <td></td>
-                                                    </#if>
+                                            <tr id="progressplan_${progressPlan_index}">
+                                                <td><input  class="form-control dateTime " name="progressPlans[${progressPlan_index}].time" readonly type="text" value="${progressPlan.time}"/></td>
+                                                <td><input class="form-control " name="progressPlans[${progressPlan_index}].event" type="text" value="${progressPlan.event}"/></td>
+                                                <td><input class="form-control " name="progressPlans[${progressPlan_index}].remark" type="text" value="${progressPlan.remark}"/></td>
+                                                <#if !progressPlan_has_next>
+                                                    <td>
+                                                        <button class="btn btn-info" onclick="addProgressPlan(${progressPlan_index}),dateTime()" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                                        <button class="btn btn-warning" <#if progressPlan_index!=0>onclick="deleteProgressPlan(${progressPlan_index})"</#if> type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </td>
+                                                <#else>
+                                                    <td></td>
+                                                </#if>
 
-                                                </tr>
+                                            </tr>
                                             </#list>
                                         <#else>
-                                            <tr id="progressplan_0">
-                                                <td><input class="form-control" name="progressPlans[0].time" type="text" value=""/></td>
-                                                <td><input class="form-control" name="progressPlans[0].event" type="text" value=""/></td>
-                                                <td><input class="form-control" name="progressPlans[0].remark" type="text" value=""/></td>
-                                                <td>
-                                                    <button class="btn btn-info" onclick="addProgressPlan(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
-                                                </td>
-                                            </tr>
-                                        </#if>
-                                    <#else>
                                         <tr id="progressplan_0">
-                                            <td><input class="form-control" name="progressPlans[0].time" type="text" value=""/></td>
-                                            <td><input class="form-control" name="progressPlans[0].event" type="text" value=""/></td>
-                                            <td><input class="form-control" name="progressPlans[0].remark" type="text" value=""/></td>
+                                            <td><input class="form-control dateTime" name="progressPlans[0].time" readonly type="text" value=""/></td>
+                                            <td><input class="form-control " name="progressPlans[0].event" type="text" value=""/></td>
+                                            <td><input class="form-control " name="progressPlans[0].remark" type="text" value=""/></td>
                                             <td>
                                                 <button class="btn btn-info" onclick="addProgressPlan(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
                                                 <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
                                             </td>
                                         </tr>
+                                        </#if>
+                                    <#else>
+                                    <tr id="progressplan_0">
+                                        <td><input class="form-control dateTime" name="progressPlans[0].time" readonly type="text" value=""/></td>
+                                        <td><input class="form-control" name="progressPlans[0].event" type="text" value=""/></td>
+                                        <td><input class="form-control" name="progressPlans[0].remark" type="text" value=""/></td>
+                                        <td>
+                                            <button class="btn btn-info" onclick="addProgressPlan(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                            <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </td>
+                                    </tr>
                                     </#if>
                                 </tbody>
                             </table>
@@ -115,6 +120,29 @@
                 </div>
             </div>
         </div>
+
+        <script>
+
+            function dateTime(){
+                $("#progressplan .dateTime").datetimepicker({
+                    language:"zh-CN",
+                    format:"yyyy-mm-dd",
+                    minView : "month",
+                    todayBtn:true,
+                    autoclose:true
+                })
+            }
+
+
+            $("#progressplan .dateTime").datetimepicker({
+                language:"zh-CN",
+                format:"yyyy-mm-dd",
+                minView : "month",
+                todayBtn:true,
+                autoclose:true
+            })
+
+        </script>
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->

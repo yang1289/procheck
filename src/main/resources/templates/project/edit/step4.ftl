@@ -74,7 +74,7 @@
                                             </#list>
                                         <#else>
                                             <tr id="progressplan_0">
-                                                <td><input class="form-control dateTime" name="progressPlans[0].time" type="text" value=""/></td>
+                                                <td><input class="form-control dateTime" name="progressPlans[0].time" readonly type="text" value=""/></td>
                                                 <td><input class="form-control " name="progressPlans[0].event" type="text" value=""/></td>
                                                 <td><input class="form-control " name="progressPlans[0].remark" type="text" value=""/></td>
                                                 <td>
@@ -85,7 +85,7 @@
                                         </#if>
                                     <#else>
                                         <tr id="progressplan_0">
-                                            <td><input class="form-control dateTime" name="progressPlans[0].time" type="text" value=""/></td>
+                                            <td><input class="form-control dateTime" name="progressPlans[0].time" readonly type="text" value=""/></td>
                                             <td><input class="form-control" name="progressPlans[0].event" type="text" value=""/></td>
                                             <td><input class="form-control" name="progressPlans[0].remark" type="text" value=""/></td>
                                             <td>

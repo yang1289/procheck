@@ -51,7 +51,7 @@
                                                 <#if !applyuser_has_next>
                                                     <td>
                                                         <button class="btn btn-info" onclick="addUser(${applyuser_index})" type="button"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <button class="btn btn-warning" onclick="deleteUser(${applyuser_index})"type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        <button class="btn btn-warning"  <#if applyuser_index!=0>onclick="deleteUser(${applyuser_index})"</#if> type="button"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </td>
                                                 <#else>
                                                     <td></td>

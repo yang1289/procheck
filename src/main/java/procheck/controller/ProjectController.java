@@ -166,9 +166,12 @@ public class ProjectController {
                 }
                 project.setApplyUsers(applyUsers);
                 projectService.projectSave(project);
+                model.addAttribute("project",project);
                 model.addAttribute("message","保存成功");
             }else{
+                model.addAttribute("project",project);
                 model.addAttribute("message","没有填写小组成员，请填写");
+                return "/project/apply/step2";
             }
             model.addAttribute("project",project);
             if(method.equals("edit")){
@@ -255,8 +258,11 @@ public class ProjectController {
             project.setProgressPlans(progressPlanSet);
             projectService.projectSave(project);
             model.addAttribute("message","保存成功");
+            model.addAttribute("project",project);
         }else{
             model.addAttribute("message","没有填完信息，前两项必填");
+            model.addAttribute("project",project);
+            return "/project/apply/step4";
         }
 
         model.addAttribute("project",project);
@@ -314,7 +320,9 @@ public class ProjectController {
             projectService.projectSave(project);
             model.addAttribute("message","保存成功");
         }else{
+            model.addAttribute("project",project);
             model.addAttribute("message","前两项必须填写");
+            return "/project/apply/step5";
         }
         model.addAttribute("project",project);
         if(method.equals("edit")){

@@ -1,18 +1,21 @@
 package procheck.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import procheck.JsonModel.UserData;
 import procheck.model.Academy;
 import procheck.model.Project;
 import procheck.model.Role;
@@ -149,6 +152,34 @@ public class UserController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@GetMapping("/data")
+	@ResponseBody
+	public String getUserData(){
+		List<User> users=userService.findAll();
+		List<UserData> userDatas=new ArrayList<>();
+		DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		int i=1;
+		for(User user:users) {
+			List<String> rolenames=new ArrayList<>();
+			UserData userData=new UserData();
+			userData.setNo(i++);
+			userData.setUsername(user.getUsername());
+			Set<Role> roles=user.getRoles();
+			for(Role role:roles){
+				rolenames.add(role.getDescription());
+			}
+			userData.setRolename(rolenames);
+			userData.setEmail(user.getEmail());
+			userData.setRegistTime(dateFormat.format(user.getRegistTime()));
+			userDatas.add(userData);
+		}
+
+		//变成json格式
+		Gson gson=new Gson();
+		String json=gson.toJson(userDatas);
+		return json;
 	}
 	
 }
