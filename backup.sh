@@ -1,3 +1,3 @@
 #/bin/sh
-mysqldump procheck>/home/yangqiang/www/procheck/sql/procheck_2017-10-27.sql
+mysqldump -uroot -pyq199410 --databases procheck>/home/yangqiang/www/procheck/sql/procheck_2017-11-11.sql
 exit
