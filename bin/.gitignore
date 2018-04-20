@@ -1,0 +1,13 @@
+/target/
+/D:/
+/images/
+/log/
+/static/
+/ueditor/image/
+/ueditor/static/
+/ueditor/temp/
+/ueditor/upload/
+/backup.bat
+/backup.sh
+/.idea/
+/.settings/
