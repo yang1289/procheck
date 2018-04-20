@@ -167,6 +167,7 @@
 				<configuration>
 					<mainClass>procheck.Application</mainClass>
 					<fork>true</fork>
+					<executable>true</executable>
 				</configuration>
 			</plugin>
 		</plugins>
