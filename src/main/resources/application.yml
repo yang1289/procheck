@@ -9,7 +9,7 @@ spring:
     url: jdbc:mysql://localhost:3306/procheck?useSSL=false&characterEncoding=utf8
     username: root
     password: yq199410
-    backupPath: D:/workstation/procheck/sql/
+    backupPath: /home/www/procheck/sql/
 
   jpa:
     database: mysql
@@ -19,8 +19,8 @@ spring:
   mvc:
     static-path-pattern: /static/**
 site:
-  uploadPath: D:/workstation/procheck/ueditor/
+  uploadPath: /home/www/procheck/ueditor/
   uploadName: /upload/
-  imagePath: D:/workstation/procheck/images/
+  imagePath: /home/www/procheck/images/
   imageName: /images/
 
