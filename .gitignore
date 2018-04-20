@@ -1,0 +1,13 @@
+/target/
+/D:/
+/images/
+/log/
+/static/
+/ueditor/image/
+/ueditor/static/
+/ueditor/temp/
+/ueditor/upload/
+/backup.bat
+/backup.sh
+/src/main/resources/application.yml
+/src/main/resources/logback.xml
