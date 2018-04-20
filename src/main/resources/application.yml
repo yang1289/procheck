@@ -1,6 +1,6 @@
 spring:
   http:
-    multipart:
+    servlet:
       max-request-size: 100Mb
       max-file-size: 20Mb
   freemarker:
