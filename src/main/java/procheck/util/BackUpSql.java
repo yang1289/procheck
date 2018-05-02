@@ -63,7 +63,7 @@ public class BackUpSql {
                 writer=new OutputStreamWriter(fout,"utf-8");
                 StringBuffer sb=new StringBuffer("");
                 sb.append("#/bin/sh"+"\r\n");
-                sb.append("mysqldump -u"+username+" -p"+password+" --databases "+sch+">"+backuppath+filename+"\r\n");
+                sb.append("mysqldump -u"+username+" -p"+password+" --databases "+sch+">"+backuppath+filename+"\n");
                 sb.append("exit");
                 String outstr=sb.toString();
                 writer.write(outstr);

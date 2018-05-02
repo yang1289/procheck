@@ -11,3 +11,4 @@
 /backup.sh
 /src/main/resources/application.yml
 /src/main/resources/logback.xml
+/sql/
