@@ -165,6 +165,7 @@ public class ProjectController {
                 for (ApplyUser applyUser : applyUserList) {
                     applyUsers.add(applyUser);
                 }
+
                 project.setApplyUsers(applyUsers);
                 projectService.projectSave(project);
                 model.addAttribute("project",project);

@@ -23,7 +23,7 @@ public class Project implements Serializable {
     @GeneratedValue
     private int id;
     private String projectName;
-    @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(
             name = "pro_project_applyuser",
             joinColumns = {@JoinColumn(name = "project_id")},
