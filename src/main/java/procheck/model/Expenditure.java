@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "pro_expenditure")
 public class Expenditure implements Serializable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
     private double money;

@@ -1,6 +1,7 @@
 package procheck.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,10 @@ public interface PermissionDao extends JpaRepository<Permission, Integer> {
 	List<Permission> findByPid(int pid);
 
 	Permission findById(int id);
+
+	public Permission save(Permission permission);
+
+	public Permission findFirstByOrderByIdDesc();
 	
 	
 	

@@ -1,6 +1,7 @@
 package procheck.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.Authentication;
 import procheck.util.constants;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 public class Project implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String projectName;
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -74,6 +75,13 @@ public class Project implements Serializable {
     @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinColumn(name = "adviserId")
     private User adviser;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private String midReport;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private String finalReport;
 
     public int getId() {
         return id;
@@ -283,5 +291,21 @@ public class Project implements Serializable {
 
     public void setAdviser(User adviser) {
         this.adviser = adviser;
+    }
+
+    public String getMidReport() {
+        return midReport;
+    }
+
+    public void setMidReport(String midReport) {
+        this.midReport = midReport;
+    }
+
+    public String getFinalReport() {
+        return finalReport;
+    }
+
+    public void setFinalReport(String finalReport) {
+        this.finalReport = finalReport;
     }
 }

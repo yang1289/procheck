@@ -3,6 +3,7 @@ package procheck.model;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -16,7 +17,7 @@ public class Permission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	private String description;
@@ -27,7 +28,7 @@ public class Permission implements Serializable {
 
 	private String url;
 
-	@ManyToMany(mappedBy = "permissions",fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "permissions",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Role> roles = new HashSet<Role>();
 
 	@ManyToMany(mappedBy = "permissions", cascade = CascadeType.ALL,fetch = FetchType.LAZY)

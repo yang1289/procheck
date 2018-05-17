@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "pro_applyuser")
 public class ApplyUser implements Serializable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String applyName;
     private String applyMajor;

@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "pro_academy")
 public class Academy implements Serializable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private String name;

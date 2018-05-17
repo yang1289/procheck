@@ -43,7 +43,7 @@
                             <ul class="nav nav-pills nav-stacked">
                               <#list permissions as permission>
                               	<#if permission.name?contains("proprocess")>
-                              		<li><a href="#"> ${permission.description}</a></li>
+                              		<li><a href="${permission.url}"> ${permission.description}</a></li>
                               	</#if>
                               </#list>
                             </ul>

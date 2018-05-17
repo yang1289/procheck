@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "pro_progressplan")
 public class ProgressPlan implements Serializable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String time;
     private String event;

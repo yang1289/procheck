@@ -16,7 +16,7 @@ public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	private String description;
@@ -26,7 +26,7 @@ public class Role implements Serializable {
 	@ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
 	private Set<User> users = new HashSet<>();
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinTable(name = "pro_role_permission", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "permission_id") })
 	private Set<Permission> permissions = new HashSet<>();

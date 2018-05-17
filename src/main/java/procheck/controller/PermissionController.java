@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,7 @@ import procheck.service.PermissionService;
 @RequestMapping("/permission")
 public class PermissionController {
 
+	private final static Logger logger=  LogManager.getLogger(PermissionController.class);
 	@Autowired
 	private PermissionService permissionService;
 
@@ -47,6 +51,7 @@ public class PermissionController {
 		Permission permission = new Permission();
 		permission.setDescription(description);
 		permission.setName(name);
+
 		
 		if (isParent) {
 			permission.setPid(0);
@@ -95,8 +100,9 @@ public class PermissionController {
 	
 	@GetMapping("/delete")
 	public String deleteById(@RequestParam int id,HttpServletResponse response){
-		
-		permissionService.deleteById(id);
+
+		Permission permission=permissionService.findById(id);
+		permissionService.delete(permission);
 		
 		try {
 			response.sendRedirect("/permission/list");
