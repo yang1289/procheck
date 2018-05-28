@@ -12,7 +12,7 @@ import procheck.model.Role;
 
 @Service
 @Transactional
-public class RoleService {
+public class RoleService  {
 	
 	@Autowired
 	private RoleRepository roleRepository;

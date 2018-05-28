@@ -12,11 +12,12 @@ public class UserData {
     private String registTime;
     private String email;
     private String chineseName;
+    private String academy;
 
     public UserData() {
     }
 
-    public UserData(int no, String username, List<String> rolename, String registTime, String email,String chineseName,int operateId) {
+    public UserData(int no, String username, List<String> rolename, String registTime, String email,String chineseName,int operateId,String academy) {
         this.no = no;
         this.username = username;
         this.rolename = rolename;
@@ -24,6 +25,7 @@ public class UserData {
         this.email = email;
         this.chineseName=chineseName;
         this.operateId=operateId;
+        this.academy=academy;
 
     }
 
@@ -81,5 +83,13 @@ public class UserData {
 
     public void setOperateId(int operateId) {
         this.operateId = operateId;
+    }
+
+    public String getAcademy() {
+        return academy;
+    }
+
+    public void setAcademy(String academy) {
+        this.academy = academy;
     }
 }

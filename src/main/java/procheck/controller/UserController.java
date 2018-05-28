@@ -177,6 +177,11 @@ public class UserController {
 				userdata.setEmail(user.getEmail());
 				userdata.setRolename(rolename);
 				userdata.setRegistTime(dateFormat.format(user.getRegistTime()));
+				if(user.getAcademy()!=null){
+					userdata.setAcademy(user.getAcademy().getName());
+				}else{
+					userdata.setAcademy("无");
+				}
 				userDatas.add(userdata);
 			}
 		}else{
@@ -194,6 +199,11 @@ public class UserController {
 				userData.setRolename(rolenames);
 				userData.setEmail(user.getEmail());
 				userData.setRegistTime(dateFormat.format(user.getRegistTime()));
+				if(user.getAcademy()!=null){
+					userData.setAcademy(user.getAcademy().getName());
+				}else{
+					userData.setAcademy("无");
+				}
 				userData.setOperateId(user.getId());
 				userDatas.add(userData);
 			}

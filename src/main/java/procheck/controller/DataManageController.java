@@ -48,7 +48,7 @@ import java.util.*;
 public class DataManageController {
     private static Logger logger=LogManager.getLogger(DataManageController.class);
     @Autowired
-    private MysqlConfig mysqlConfig;
+    private  MysqlConfig mysqlConfig;
     @Autowired
     private ImportDataService importDataService;
     @Autowired
@@ -56,7 +56,7 @@ public class DataManageController {
     @Autowired
     private UserService userService;
     @Autowired
-    private static RoleService roleService;
+    private RoleService roleService;
 
     @GetMapping("/list")
     public String dataList(Model model){
@@ -342,7 +342,7 @@ public class DataManageController {
         return messData;
     }
 
-    private static List<User> getImportData(File file,Map columnMap,String password,AcademyService academyService){
+    private  List<User> getImportData(File file,Map columnMap,String password,AcademyService academyService){
         List<User> users=new ArrayList<>();
         try {
             FileInputStream is=new FileInputStream(file);
@@ -358,7 +358,8 @@ public class DataManageController {
             Map tempMap=null;
             User user=null;
             Set<Role> roles=new HashSet<>();
-            roles.add(roleService.findByName("teacher"));
+            logger.info(roleService.findByName("student").getDescription());
+            roles.add(roleService.findByName("adviser"));
             for(int i=1;i<totalRows;i++){
                 user=new User();
                if(sheet.getRow(i).getCell((Integer)columnMap.get("usernameColumn")).getCellTypeEnum()==CellType.STRING){
@@ -388,16 +389,16 @@ public class DataManageController {
                 if(sheet.getRow(i).getCell((Integer)columnMap.get("sexColumn")).getCellTypeEnum()==CellType.STRING){
                     String cellName=sheet.getRow(i).getCell((Integer)columnMap.get("sexColumn")).getStringCellValue();
                     if(cellName.equals("男")){
-                        user.setSex('m');
+                        user.setSex('1');
                     }else{
-                        user.setSex('f');
+                        user.setSex('0');
                     }
                 }else if(sheet.getRow(i).getCell((Integer)columnMap.get("sexColumn")).getCellTypeEnum()==CellType.NUMERIC){
                     Double cellName=sheet.getRow(i).getCell((Integer)columnMap.get("sexColumn")).getNumericCellValue();
                     if(cellName>0){
-                        user.setSex('m');
+                        user.setSex('1');
                     }else{
-                        user.setSex('f');
+                        user.setSex('0');
                     }
                 }else{
                     return new ArrayList<>();

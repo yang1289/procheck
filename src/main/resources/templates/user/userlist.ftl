@@ -65,24 +65,24 @@
                        <button type="button" class="btn btn-primary" onclick="filter()">确定</button>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h4>搜索：</h4>
-                    <div class="col-md-4">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" value=""/>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-primary">搜索</button>
-                    </div>
-                </div>
+                <#--<div class="col-md-12">-->
+                    <#--<h4>搜索：</h4>-->
+                    <#--<div class="col-md-4">-->
+                        <#--<select class="form-control">-->
+                            <#--<option>1</option>-->
+                            <#--<option>2</option>-->
+                            <#--<option>3</option>-->
+                            <#--<option>4</option>-->
+                            <#--<option>5</option>-->
+                        <#--</select>-->
+                    <#--</div>-->
+                    <#--<div class="col-md-4">-->
+                        <#--<input type="text" class="form-control" value=""/>-->
+                    <#--</div>-->
+                    <#--<div class="col-md-4">-->
+                        <#--<button type="button" class="btn btn-primary">搜索</button>-->
+                    <#--</div>-->
+                <#--</div>-->
                 <div class="col-md-12">
                     <br/>
                 </div>
@@ -170,6 +170,9 @@
                 },{
 				    field:'chineseName',
                     title:'姓名'
+                },{
+				    field:"academy",
+                    title:"隶属学院"
                 },{
                     field:'rolename',
                     title:"角色"
