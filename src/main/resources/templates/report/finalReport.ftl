@@ -13,7 +13,7 @@
                     <a href="/index">主页</a>
                 </li>
                 <li>
-                    <a href="/proprocess/midprocess">中期进展列表</a>
+                    <a href="/proprocess/finalprocess">结题报告列表</a>
                 </li>
 
 
@@ -24,7 +24,7 @@
         <div class="row">
             <div class="box col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">中期进展</div>
+                    <div class="panel-heading">结题报告</div>
                     <div class="panel-body">
                         <#if message??>
                             <div class="alert alert-info" role="alert">${message!}</div>
@@ -50,7 +50,7 @@
                                         <td>${project.createTime!}</td>
 
                                         <td>
-                                            <a class="btn btn-primary" href="/proprocess/editMidReport?id=${project.id!}">填写中期报告</a>
+                                            <a class="btn btn-primary" href="/proprocess/editfinalReport?id=${project.id!}">填写结题报告</a>
                                         </td>
                                     </tr>
                                     </#list>

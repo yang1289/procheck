@@ -26,6 +26,19 @@ public class PermissionService {
 		List<Permission> permissions = new ArrayList<>();
 		if (user.getRoles().size() > 0) {
 			user.getRoles().stream().filter(role -> role.getPermissions().size() > 0).forEach(role -> {
+				permissions.addAll(role.getPermissions().stream().filter(permission -> permission.getPid() >= 0)
+						.collect(Collectors.toList()));
+			});
+		}
+		return permissions;
+
+	}
+
+	public List<Permission> findChildByUserId(int userid) {
+		User user = userService.findById(userid);
+		List<Permission> permissions = new ArrayList<>();
+		if (user.getRoles().size() > 0) {
+			user.getRoles().stream().filter(role -> role.getPermissions().size() > 0).forEach(role -> {
 				permissions.addAll(role.getPermissions().stream().filter(permission -> permission.getPid() > 0)
 						.collect(Collectors.toList()));
 			});

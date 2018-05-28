@@ -50,7 +50,7 @@ public class CommonInterceptor implements HandlerInterceptor{
 					
 					modeMap.addAttribute("_principal",((UserDetails)o).getUsername());
 					modeMap.addAttribute("_roles",((UserDetails)o).getAuthorities());
-					modeMap.addAttribute("permissions",permissionService.findByUserId(user.getId()));
+					modeMap.addAttribute("permissions",permissionService.findChildByUserId(user.getId()));
 				}
 			}
 		}

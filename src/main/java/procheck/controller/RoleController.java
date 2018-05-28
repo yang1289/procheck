@@ -58,6 +58,12 @@ public class RoleController {
 		if(permissionIds!=null){
 			for(int i:permissionIds){
 				Permission permission=permissionService.findById(i);
+				if(permission.getPid()>0){
+					if(!permissions.contains(permissionService.findById(permission.getPid()))){
+						permissions.add(permissionService.findById(permission.getPid()));
+					}
+
+				}
 				permissions.add(permission);
 			}
 		}

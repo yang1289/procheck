@@ -25,24 +25,24 @@
                             </li>
                         </#if>
 
-                        <#if _roles?seq_contains("project:list")>
+                        <#if _roles?seq_contains("project")>
                             <li class="accordion">
                                 <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目 </span></a>
                                 <ul class="nav nav-pills nav-stacked">
                                     <#list permissions as permission>
-                                        <#if permission.name?contains("project")>
+                                        <#if permission.name?contains("project:")>
                                             <li><a href="${permission.url}"> ${permission.description}</a></li>
                                         </#if>
                                     </#list>
                                 </ul>
                             </li>
                         </#if>
-                       <#if _roles?seq_contains("proprocess:process")>
+                       <#if _roles?seq_contains("proprocess")>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 项目进展 </span></a>
                             <ul class="nav nav-pills nav-stacked">
                               <#list permissions as permission>
-                              	<#if permission.name?contains("proprocess")>
+                              	<#if permission.name?contains("proprocess:")>
                               		<li><a href="${permission.url}"> ${permission.description}</a></li>
                               	</#if>
                               </#list>
@@ -50,50 +50,37 @@
                         </li>
                       </#if>
 
-                      
-                       <#if _roles?seq_contains("user:list")>
+
+                       <#if _roles?seq_contains("user")>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 账号 </span></a>
                             <ul class="nav nav-pills nav-stacked">
                               <#list permissions as permission>
-                              	<#if permission.name?contains("user")>
+                              	<#if permission.name?contains("user:")>
                               		<li><a href="${permission.url!}"> ${permission.description}</a></li>
                               	</#if>
                               </#list>
                             </ul>
                         </li>
                       </#if>
-                        <#if _roles?seq_contains("academy:list")>
+                        <#if _roles?seq_contains("academy")>
                             <li class="accordion">
                                 <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 学院管理 </span></a>
                                 <ul class="nav nav-pills nav-stacked">
                                     <#list permissions as permission>
-                                        <#if permission.name?contains("academy")>
+                                        <#if permission.name?contains("academy:")>
                                             <li><a href="${permission.url!}"> ${permission.description}</a></li>
                                         </#if>
                                     </#list>
                                 </ul>
                             </li>
                         </#if>
-                      <#if _roles?seq_contains("permission:list")>
+                      <#if _roles?seq_contains("permission")>
                        	 <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 权限 </span></a>
                             <ul class="nav nav-pills nav-stacked">
                               <#list permissions as permission>
-                              	<#if permission.name?contains("permission")>
-                              		<li><a href="${permission.url!}"> ${permission.description}</a></li>
-                              	</#if>
-                              </#list>
-                            </ul>
-                        </li>
-                      </#if>
-                      
-                        <#if _roles?seq_contains("role:list")>
-                       	 <li class="accordion">
-                            <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 角色 </span></a>
-                            <ul class="nav nav-pills nav-stacked">
-                              <#list permissions as permission>
-                              	<#if permission.name?contains("role")>
+                              	<#if permission.name?contains("permission:")>
                               		<li><a href="${permission.url!}"> ${permission.description}</a></li>
                               	</#if>
                               </#list>
@@ -101,12 +88,25 @@
                         </li>
                       </#if>
 
-                        <#if _roles?seq_contains("dataManage:list")>
+                        <#if _roles?seq_contains("role")>
+                       	 <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 角色 </span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                              <#list permissions as permission>
+                              	<#if permission.name?contains("role:")>
+                              		<li><a href="${permission.url!}"> ${permission.description}</a></li>
+                              	</#if>
+                              </#list>
+                            </ul>
+                        </li>
+                      </#if>
+
+                        <#if _roles?seq_contains("dataManage")>
                             <li class="accordion">
                                 <a href="#"><i class="glyphicon glyphicon-plus"></i><span> 数据备份 </span></a>
                                 <ul class="nav nav-pills nav-stacked">
                                     <#list permissions as permission>
-                                        <#if permission.name?contains("dataManage")>
+                                        <#if permission.name?contains("dataManage:")>
                                             <li><a href="${permission.url!}"> ${permission.description}</a></li>
                                         </#if>
                                     </#list>
