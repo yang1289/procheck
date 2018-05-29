@@ -66,7 +66,7 @@ public class IndexController {
 	}
 	
 	@PostMapping("/regist")
-	public String register(String username,String password,String chineseName,int academy,int major,int grade,Model model){
+	public String register(String username,String password,String chineseName,int academy,int major,int grade,Model model,HttpServletResponse response){
 		User user=userService.findUserByUsername(username);
 		if(user!=null){
 			model.addAttribute("message", "该用户已经被注册");
@@ -83,7 +83,11 @@ public class IndexController {
 			Role studentRole=roleService.findByName("student");
 			user=new User(username,password,chineseName,date,registAcademy,registMajor,registGrade,studentRole);
 			userService.save(user);
-			model.addAttribute("message","注册成功");
+			try {
+				response.sendRedirect("/login");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		List<Academy> academies=new ArrayList<>();
 		academies=academyService.findAll();
