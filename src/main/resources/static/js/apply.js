@@ -94,6 +94,10 @@ function saveBase() {
         $("#message").html("<div class='alert alert-warning' role='alert'>项目名称不能为空</div>")
         ok=false;
     }
+    if(teachunit.length==0){
+        $("#message").html("<div class='alert alert-warning' role='alert'>指导老师不能为空</div>")
+        ok=false;
+    }
     if(ok){
         $("#save_modal").modal("show");
     }else{

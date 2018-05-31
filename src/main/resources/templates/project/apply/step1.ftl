@@ -27,7 +27,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">项目申请</div>
                     <div class="panel-body">
-                        <form role="form" id="step1" method="post" action="/project/applystep1?method=apply">
+                        <#--action="/project/applystep1?method=apply"-->
+                        <form role="form" id="step1" method="post" >
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <#if project??><input type="hidden" name="id" value="${project.id}"/></#if>
                             <div class="form-group col-md-12">
@@ -36,8 +37,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="adviser">指导老师</label>
-                                <select class="form-control" name="adviserId">
-
+                                <select class="form-control" name="adviserId" id="adviser">
+                                    <option value="">无</option>
                                     <#list advisers as adviser>
                                         <option value="${adviser.id}" <#if project??><#if project.adviser??><#if adviser.id==project.adviser.id>selected</#if></#if></#if> >${adviser.chineseName}|${adviser.academy.name}</option>
                                     </#list>
@@ -53,7 +54,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="teachUnit">所属教学单位</label>
-                                <input class="form-control" type="text" id="teachUnit" name="teachUnit" value="<#if project??><#if project.teachUnit??>${project.teachUnit}</#if></#if>"/>
+                                <input class="form-control" readonly="readonly" type="text" id="teachUnit" name="teachUnit" value="<#if project??><#if project.teachUnit??>${project.teachUnit}</#if></#if>"/>
                             </div>
                             <div class="form-group col-md-12">
                                 <button type="button" id="baseapply" onclick="saveBase()" class="btn btn-primary">保存并下一步</button>
@@ -71,7 +72,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                            <button type="submit" id="save"  class="btn btn-primary">是</button>
+                                            <button type="submit" id="save"  onsubmit="check()" class="btn btn-primary">是</button>
                                         </div>
                                     </div>
                                 </div>
@@ -82,6 +83,34 @@
                 </div>
             </div>
         </div>
+        <script>
+
+            $("#adviser").change(function () {
+                var adviserid=$("#adviser").val();
+                if(adviserid.length!=0){
+                    $.ajax({
+                        url:"/project/getunit",
+                        method:"GET",
+                        datatype:"JSON",
+                        data:{
+                            adviserid:adviserid
+                        },
+                        error:function (data) {
+                            alert("系统错误");
+                        },
+                        success:function (data) {
+                            if(data!="error"){
+                                $("#teachUnit").val(data);
+                            }else{
+                                alert("查询所属单位出错");
+                            }
+                        }
+                    })
+                }else{
+                    $("#teachUnit").val("");
+                }
+            })
+        </script>
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->

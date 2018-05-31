@@ -44,10 +44,10 @@
                                     <#if project.applyUsers??&&(project.applyUsers?size>=1)>
                                         <#list project.applyUsers as applyuser>
                                             <tr id="user_${applyuser_index}">
-                                                <td><input class="form-control" name="applyusers[0].applyName" type="text" value="${applyuser.applyName}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyMajor" type="text" value="${applyuser.applyMajor}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyNumber" type="text" value="${applyuser.applyNumber}"/></td>
-                                                <td><input class="form-control" name="applyusers[0].applyGrade" type="text" value="${applyuser.applyGrade}"/></td>
+                                                <td><input class="form-control" readonly="readonly" name="applyusers[0].applyName" type="text" value="${applyuser.applyName}"/></td>
+                                                <td><input class="form-control" readonly="readonly" name="applyusers[0].applyMajor" type="text" value="${applyuser.applyMajor}"/></td>
+                                                <td><input class="form-control" readonly="readonly" name="applyusers[0].applyNumber" type="text" value="${applyuser.applyNumber}"/></td>
+                                                <td><input class="form-control" readonly="readonly" name="applyusers[0].applyGrade" type="text" value="${applyuser.applyGrade}"/></td>
                                                 <#if !applyuser_has_next>
                                                     <td>
                                                         <button class="btn btn-info" onclick="addUser(${applyuser_index})" type="button"><i class="glyphicon glyphicon-plus"></i></button>
@@ -60,10 +60,10 @@
                                         </#list>
                                     <#else>
                                         <tr id="user_0">
-                                            <td><input class="form-control" name="applyusers[0].applyName" type="text" value=""/></td>
-                                            <td><input class="form-control" name="applyusers[0].applyMajor" type="text" value=""/></td>
-                                            <td><input class="form-control" name="applyusers[0].applyNumber" type="text" value=""/></td>
-                                            <td><input class="form-control" name="applyusers[0].applyGrade" type="text" value=""/></td>
+                                            <td><input class="form-control" readonly="readonly" name="applyusers[0].applyName" type="text" value="<#if self??>${self.chineseName!}</#if> "/></td>
+                                            <td><input class="form-control" readonly="readonly" name="applyusers[0].applyMajor" type="text" value="<#if self??>${self.major.name!}</#if>"/></td>
+                                            <td><input class="form-control" readonly="readonly" name="applyusers[0].applyNumber" type="text" value="<#if self??>${self.username!}</#if>"/></td>
+                                            <td><input class="form-control" readonly="readonly" name="applyusers[0].applyGrade" type="text" value="<#if self??>${self.grade.name!}</#if>"/></td>
                                             <td>
                                                 <button class="btn btn-info" onclick="addUser(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
                                                 <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>
@@ -72,10 +72,10 @@
                                     </#if>
                                 <#else>
                                     <tr id="user_0">
-                                        <td><input class="form-control" name="applyusers[0].applyName" type="text" value=""/></td>
-                                        <td><input class="form-control" name="applyusers[0].applyMajor" type="text" value=""/></td>
-                                        <td><input class="form-control" name="applyusers[0].applyNumber" type="text" value=""/></td>
-                                        <td><input class="form-control" name="applyusers[0].applyGrade" type="text" value=""/></td>
+                                        <td><input class="form-control" readonly="readonly" name="applyusers[0].applyName" type="text" value="<#if self??>${self.chineseName!}</#if> "/></td>
+                                        <td><input class="form-control" readonly="readonly" name="applyusers[0].applyMajor" type="text" value="<#if self??>${self.major.name!}</#if>"/></td>
+                                        <td><input class="form-control" readonly="readonly" name="applyusers[0].applyNumber" type="text" value="<#if self??>${self.username!}</#if>"/></td>
+                                        <td><input class="form-control" readonly="readonly" name="applyusers[0].applyGrade" type="text" value="<#if self??>${self.grade.name!}</#if>"/></td>
                                         <td>
                                             <button class="btn btn-info" onclick="addUser(0)" type="button"><i class="glyphicon glyphicon-plus"></i></button>
                                             <button class="btn btn-warning" type="button"><i class="glyphicon glyphicon-minus"></i></button>

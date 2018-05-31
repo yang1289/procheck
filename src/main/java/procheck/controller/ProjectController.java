@@ -1,7 +1,9 @@
 package procheck.controller;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,7 +70,7 @@ public class ProjectController {
 
     }
     @GetMapping("/applystep1")
-    public String stepone(Integer id,Model model,@RequestParam String method){
+    public String stepone(Integer id,Model model,@RequestParam String method,ModelAndView modelAndView){
         if(id!=null){
             Project project=projectService.findById(id);
             model.addAttribute("project",project);
@@ -81,8 +83,20 @@ public class ProjectController {
         }else {
             return "/project/apply/step1";
         }
-
-
+    }
+    @ResponseBody
+    @GetMapping("/getunit")
+    public String getUnit(Integer adviserid){
+        Academy academy=null;
+        String result="";
+        if(adviserid!=null){
+            User user=userService.findById(adviserid);
+            academy=user.getAcademy();
+            result=academy.getName();
+        }else{
+            result="error";
+        }
+        return result;
     }
     @PostMapping("/applystep1")
     public String saveStepOne(String projectName,int adviserId,String jobTitle,String libName,String teachUnit,Model model,Integer id,@RequestParam String method) throws Exception{
@@ -123,11 +137,15 @@ public class ProjectController {
 
     }
     @GetMapping("/applystep2")
-    public String steptwo(Integer id,Model model,@RequestParam String method){
+    public String steptwo(Integer id,Model model,@RequestParam String method,ModelAndView modelAndView){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userService.findUserByUsername(username);
+
         if(id!=null){
             Project project=projectService.findById(id);
             model.addAttribute("project",project);
         }
+        model.addAttribute("self",user);
         if(method.equals("edit")){
             return "/project/edit/step2";
         }else{
