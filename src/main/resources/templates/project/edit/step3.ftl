@@ -6,9 +6,9 @@
 </@css>
 <@js>
 <!-- 配置文件 -->
-<script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/js/ueditor/ueditor.config.js"></script>
 <!-- 编辑器源码文件 -->
-<script type="text/javascript" src="/static/js/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/js/ueditor/ueditor.all.js"></script>
 </@js>
 <@body>
 
@@ -41,7 +41,7 @@
                 </li>
             </ul>
         </div>
-        <script src="/static/js/apply.js" type="text/javascript"></script>
+        <script src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/js/apply.js" type="text/javascript"></script>
         <div id="alert"><#if message??><div class="alert alert-warning" role="alert">${message}</div></#if></div>
         <div class="row">
             <div class="box col-md-12">
