@@ -10,6 +10,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Controller;
@@ -24,10 +26,11 @@ import procheck.util.BackUpSql;
 @Controller
 @EnableConfigurationProperties(MysqlConfig.class)
 public class mainController {
+	private static final Logger logger= LogManager.getLogger(mainController.class);
 	@Autowired
 	private TaskService taskService;
 	@Autowired
-	private static MysqlConfig mysqlConfig;
+	private  MysqlConfig mysqlConfig;
 	
 //	@GetMapping("/index")
 //	 public String home(HttpServletRequest request){
@@ -106,6 +109,7 @@ public class mainController {
 	@GetMapping("getfile")
 	@ResponseBody
 	public void getfile(@RequestParam String filename, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("backuppath:++++++"+mysqlConfig.getUsername());
 		File sql = new File(mysqlConfig.getBackupPath());
 		File file = null;
 		List<String> list = new ArrayList<>();
