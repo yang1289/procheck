@@ -1,5 +1,6 @@
 package procheck;
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,7 +28,7 @@ public class webSerurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.headers().frameOptions().sameOrigin();
+		http.headers().frameOptions().sameOrigin().disable();
 		http.authorizeRequests().antMatchers("/","/upload/**","/images/**", "/static/**", "/regist","/test/**","/academy/findChild").permitAll().anyRequest().authenticated();
 
 		http.formLogin().loginPage("/login").defaultSuccessUrl("/index").usernameParameter("username")
@@ -35,6 +36,9 @@ public class webSerurityConfig extends WebSecurityConfigurerAdapter {
 		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
 
 	}
+
+
+
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
