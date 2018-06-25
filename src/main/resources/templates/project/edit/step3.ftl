@@ -2,13 +2,8 @@
 
 <@head page_title="修改项目-步骤三"/>
 <@css>
-
 </@css>
 <@js>
-<!-- 配置文件 -->
-<script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
-<!-- 编辑器源码文件 -->
-<script type="text/javascript" src="/static/js/ueditor/ueditor.all.js"></script>
 </@js>
 <@body>
 
@@ -65,15 +60,15 @@
                                         <br/>
                                         <#if project??>
                                             <#if project.searchCondition??>
-                                                <script name="searchCondition" id="searchCondition" type="text/plain">
+                                                <div name="searchCondition" id="searchCondition" class="editor">
                                                     ${project.searchCondition}
-                                                </script>
+                                                </div>
                                                 <#--<textarea id="searchCondition" name="searchCondition" >${project.searchCondition}</textarea>-->
                                             <#else>
-                                                <script name="searchCondition" id="searchCondition" type="text/plain"></script>
+                                                <div name="searchCondition" id="searchCondition" class="editor" ></div>
                                             </#if>
                                         <#else>
-                                            <script id="searchCondition" name="searchCondition" type="text/plain"></script>
+                                            <div id="searchCondition" name="searchCondition" class="editor" ></div>
                                         </#if>
                                     </div>
                                 </div>
@@ -83,12 +78,12 @@
                                         <br/>
                                         <#if project??>
                                             <#if project.searchPlan??>
-                                                <script type="text/plain" id="searchPlan" name="searchPlan">${project.searchPlan}</script>
+                                                <div class="editor" id="searchPlan" name="searchPlan">${project.searchPlan}</div>
                                             <#else>
-                                                <script type="text/plain" id="searchPlan" name="searchPlan"></script>
+                                                <div class="editor" id="searchPlan" name="searchPlan"></div>
                                             </#if>
                                         <#else>
-                                            <script type="text/plain" id="searchPlan" name="searchPlan"></script>
+                                            <div class="editor" id="searchPlan" name="searchPlan"></div>
                                         </#if>
                                     </div>
                                 </div>
@@ -98,12 +93,12 @@
                                         <br/>
                                         <#if project??>
                                             <#if project.createPoint??>
-                                                <script type="text/plain" id="createPoint" name="createPoint" class=" myEditor">${project.createPoint}</script>
+                                                <div class="editor" id="createPoint" name="createPoint" class=" myEditor">${project.createPoint}</div>
                                             <#else>
-                                                <script type="text/plain" id="createPoint" name="createPoint" class=" myEditor"></script>
+                                                <div class="editor" id="createPoint" name="createPoint" class=" myEditor"></div>
                                             </#if>
                                         <#else>
-                                            <script type="text/plain" id="createPoint" name="createPoint"  ></script>
+                                            <div class="editor" id="createPoint" name="createPoint"  ></div>
                                         </#if>
                                     </div>
                                 </div>
@@ -114,12 +109,12 @@
                                         <br/>
                                         <#if project??>
                                             <#if project.searchConditionSupport??>
-                                                <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport">${project.searchConditionSupport}</script>
+                                                <div class="editor" id="searchConditionSupport" name="searchConditionSupport">${project.searchConditionSupport}</div>
                                             <#else>
-                                                <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport"></script>
+                                                <div class="editor" id="searchConditionSupport" name="searchConditionSupport"></div>
                                             </#if>
                                         <#else>
-                                            <script type="text/plain" id="searchConditionSupport" name="searchConditionSupport"></script>
+                                            <div class="editor" id="searchConditionSupport" name="searchConditionSupport"></div>
                                         </#if>
                                     </div>
                                 </div>
@@ -129,12 +124,12 @@
                                         <br/>
                                         <#if project??>
                                             <#if project.achievenmentMethod??>
-                                                <script type="text/plain" id="achievementMethod" name="achievenmentMethod">${project.achievenmentMethod}</script>
+                                                <div class="editor" id="achievementMethod" name="achievenmentMethod">${project.achievenmentMethod}</div>
                                             <#else>
-                                                <script type="text/plain" id="achievementMethod" name="achievenmentMethod"></script>
+                                                <div class="editor" id="achievementMethod" name="achievenmentMethod"></div>
                                             </#if>
                                         <#else>
-                                            <script type="text/plain" id="achievementMethod" name="achievenmentMethod"></script>
+                                            <div class="editor" id="achievementMethod" name="achievenmentMethod"></div>
                                         </#if>
                                     </div>
                                 </div>
@@ -156,7 +151,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                            <button type="submit" id="save"  class="btn btn-primary">是</button>
+                                            <button type="submit" onsubmit="test()" id="save"  class="btn btn-primary">是</button>
                                         </div>
                                     </div>
                                 </div>
@@ -168,44 +163,63 @@
         </div>
         <!-- content ends -->
     </div><!--/#content.col-md-0-->
-    <script>
-        var ue1=UE.getEditor("searchCondition");
-        ue1.ready(function(){
-            ue1.execCommand("serverparam",{
-                "${_csrf.parameterName}":"${_csrf.token}"
-            })
-        });
 
-        var ue2=UE.getEditor("searchPlan");
-        ue2.ready(function(){
-            ue2.execCommand("serverparam",{
-                "${_csrf.parameterName}":"${_csrf.token}"
-            })
-        });
-
-
-        var ue3=UE.getEditor("createPoint");
-        ue3.ready(function(){
-            ue3.execCommand("serverparam",{
-                "${_csrf.parameterName}":"${_csrf.token}"
-            })
-        });
-
-
-        UE.getEditor("searchConditionSupport").ready(function(){
-            this.execCommand("serverparam",{
-                "${_csrf.parameterName}":"${_csrf.token}"
-            })
-        });
-
-
-        UE.getEditor("achievementMethod").ready(function(){
-            this.execCommand("serverparam",{
-                "${_csrf.parameterName}":"${_csrf.token}"
-            })
-        });
-
-    </script>
 
 </div><!--/fluid-row-->
 </@body>
+ <script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript">
+        var host,policyBase64,accessid,signature,expire,key,secret,dir;
+        var xmlhttp=new XMLHttpRequest();
+        function getPolicy() {
+            xmlhttp.open("GET","/aliyunoss/policy",false);
+            xmlhttp.send(null);
+            var obj = eval ("(" + xmlhttp.responseText+ ")");
+            host = obj['host']
+            policyBase64 = obj['policy']
+            accessid = obj['accessid']
+            signature = obj['signature']
+            expire = parseInt(obj['expire'])
+            key = obj['dir']
+            secret=obj['secret']
+        }
+        tinymce.init({
+            selector:".editor",
+            height:500,
+            language: 'zh_CN', plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
+            toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+            image_advtab: true,
+            images_upload_handler:function (blobInfo, success, failure) {
+                var now  = Date.parse(new Date()) / 1000;
+                if(expire<now+3||!expire){
+                    getPolicy()
+                }
+                var formdata;
+                console.log(blobInfo.filename());
+                formdata = new FormData();
+
+                formdata.append('OSSAccessKeyId', accessid);
+                formdata.append('policy', policyBase64);
+                formdata.append('signature', signature);
+                formdata.append('key', key+"/"+blobInfo.filename());
+                formdata.append('success_action_status', "200");
+                formdata.append('file', blobInfo.blob());
+
+
+                $.ajax({
+                    url:host,
+                    data:formdata,
+                    processData: false,//默认true，设置为 false，不需要进行序列化处理
+                    cache: false,//设置为false将不会从浏览器缓存中加载请求信息
+                    async: false,//发送同步请求
+                    contentType: false,//避免服务器不能正常解析文件---------具体的可以查下这些参数的含义
+                    type:"POST",
+                    success:function (data,textStatus,request) {
+                        success(host+"/"+key+"/"+blobInfo.filename());
+                    }
+                })
+
+
+            }
+        })
+    </script>

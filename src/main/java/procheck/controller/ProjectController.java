@@ -1,24 +1,27 @@
 package procheck.controller;
-import com.google.gson.Gson;
+
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.common.utils.BinaryUtil;
+import com.aliyun.oss.model.MatchMode;
+import com.aliyun.oss.model.PolicyConditions;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import procheck.dao.ExpenditureRepository;
+import procheck.common.config.OSSConfig;
 import procheck.model.*;
 import procheck.service.*;
 import procheck.util.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.*;
 
@@ -35,10 +38,7 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
-    @Autowired
-    private AcademyService academyService;
-    @Autowired
-    private PermissionService permissionService;
+
     @Autowired
     private ApplyUserService applyUserService;
     @Autowired
@@ -207,12 +207,13 @@ public class ProjectController {
     }
     @GetMapping("/applystep3")
     public String stepthree(Integer id,Model model,@RequestParam String method){
-        if(id!=null){
-            Project project=projectService.findById(id);
-            logger.info("研究现状:"+project.getSearchCondition());
-            model.addAttribute("project",project);
+        if(id!=null) {
+            Project project = projectService.findById(id);
+            logger.info("研究现状:" + project.getSearchCondition());
+            model.addAttribute("project", project);
         }
         logger.info("step3.method::"+method);
+
         if(method.equals("edit")){
             return "/project/edit/step3";
         }else{

@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/index"> <img alt="Charisma Logo" src="/static/img/logo20.png" class="hidden-xs"/>
+            <a class="navbar-brand" href="/index"> <img alt="Charisma Logo" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com//static/img/logo20.png" class="hidden-xs"/>
                 <span>项目审核系统</span></a>
 
             <!-- user dropdown starts -->
