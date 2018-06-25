@@ -2,10 +2,6 @@
 <@head page_title="中期报告"/>
 <@css></@css>
 <@js>
-    <!-- 配置文件 -->
-<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/js/ueditor/ueditor.config.js"></script>
-<!-- 编辑器源码文件 -->
-<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/js/ueditor/ueditor.all.js"></script>
 </@js>
 <@body>
 <div class="row">
@@ -37,9 +33,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">结题报告</div>
                     <div class="panel-body">
-                        <script id="finalReport" type="text/plain">
+                        <div id="finalreport">
                             <#if finalreport??>${finalreport!}</#if>
-                       </script>
+                        </div>
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-primary" onclick="gosaveFinalReport()">保存</button>
@@ -76,13 +72,6 @@
             function gosaveFinalReport(){
                 $("#save_modal").modal("show");
             }
-            ue=UE.getEditor("finalReport");
-            ue.ready(function(){
-                ue.execCommand("serverparam",{
-                    "${_csrf.parameterName}":"${_csrf.token}"
-                })
-            })
-
             function saveFianlReport(){
                 var projectid=$("#projectid").val();
                 var finalReport=ue.getContent();
@@ -115,3 +104,17 @@
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
 </@body>
+<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/tinymce/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/static/js/tinymceImgUpload.js"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector:"#finalreport",
+        height:500,
+        language: 'zh_CN', plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+        image_advtab: true,
+        images_upload_handler:function (blobInfo, success, failure) {
+            upload_handler(blobInfo,success,failure);
+        }
+    })
+</script>

@@ -37,9 +37,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">中期进展</div>
                     <div class="panel-body">
-                       <script id="midReport" type="text/plain">
-                           <#if midreport??>${midreport!}</#if>
-                       </script>
+                        <div id="midreport">
+                            <#if midreport??>${midreport!}</#if>
+                        </div>
+
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-primary" onclick="gosaveMidReport()">保存</button>
@@ -117,3 +118,17 @@
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
 </@body>
+<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/tinymce/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/static/js/tinymceImgUpload.js"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector:"#midreport",
+        height:500,
+        language: 'zh_CN', plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+        image_advtab: true,
+        images_upload_handler:function (blobInfo, success, failure) {
+            upload_handler(blobInfo,success,failure);
+        }
+    })
+</script>

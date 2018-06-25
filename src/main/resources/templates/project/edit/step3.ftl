@@ -167,59 +167,17 @@
 
 </div><!--/fluid-row-->
 </@body>
- <script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/tinymce/js/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript">
-        var host,policyBase64,accessid,signature,expire,key,secret,dir;
-        var xmlhttp=new XMLHttpRequest();
-        function getPolicy() {
-            xmlhttp.open("GET","/aliyunoss/policy",false);
-            xmlhttp.send(null);
-            var obj = eval ("(" + xmlhttp.responseText+ ")");
-            host = obj['host']
-            policyBase64 = obj['policy']
-            accessid = obj['accessid']
-            signature = obj['signature']
-            expire = parseInt(obj['expire'])
-            key = obj['dir']
-            secret=obj['secret']
+<script type="text/javascript" src="https://res-procheck.oss-cn-hangzhou.aliyuncs.com/static/tinymce/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/static/js/tinymceImgUpload.js"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector:".editor",
+        height:500,
+        language: 'zh_CN', plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+        image_advtab: true,
+        images_upload_handler:function (blobInfo, success, failure) {
+            upload_handler(blobInfo,success,failure);
         }
-        tinymce.init({
-            selector:".editor",
-            height:500,
-            language: 'zh_CN', plugins: 'print preview fullpage  searchreplace autolink directionality  visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
-            toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
-            image_advtab: true,
-            images_upload_handler:function (blobInfo, success, failure) {
-                var now  = Date.parse(new Date()) / 1000;
-                if(expire<now+3||!expire){
-                    getPolicy()
-                }
-                var formdata;
-                console.log(blobInfo.filename());
-                formdata = new FormData();
-
-                formdata.append('OSSAccessKeyId', accessid);
-                formdata.append('policy', policyBase64);
-                formdata.append('signature', signature);
-                formdata.append('key', key+"/"+blobInfo.filename());
-                formdata.append('success_action_status', "200");
-                formdata.append('file', blobInfo.blob());
-
-
-                $.ajax({
-                    url:host,
-                    data:formdata,
-                    processData: false,//默认true，设置为 false，不需要进行序列化处理
-                    cache: false,//设置为false将不会从浏览器缓存中加载请求信息
-                    async: false,//发送同步请求
-                    contentType: false,//避免服务器不能正常解析文件---------具体的可以查下这些参数的含义
-                    type:"POST",
-                    success:function (data,textStatus,request) {
-                        success(host+"/"+key+"/"+blobInfo.filename());
-                    }
-                })
-
-
-            }
-        })
-    </script>
+    })
+</script>
