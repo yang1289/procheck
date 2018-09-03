@@ -1,0 +1,33 @@
+spring:
+  http:
+    servlet:
+      max-request-size: 100Mb
+      max-file-size: 20Mb
+  freemarker:
+    cache: true
+  datasource:
+    url: sqljdbc:mysql://localhost:3306/procheck?useSSL=false&characterEncoding=utf8
+    username: root
+    password: ******
+    backupPath: D:/workstation/procheck/sql/  #备份数据库地址
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  mvc:
+    static-path-pattern: /static/**
+site:
+  uploadPath: D:/workstation/procheck/ueditor/
+  uploadName: /upload/
+  imagePath: D:/workstation/procheck/images/ 
+  imageName: /images/
+aliyunoss:
+  endpoint: #oss服务的端点节点地址
+  accessKeyId: #访问ID
+  accessKeySecret: #访问密码
+  bucket: #oss bucket地址
+  dir: #保存地址
+
+  ##配置文件请删除#号~
