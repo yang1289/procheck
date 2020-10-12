@@ -70,8 +70,7 @@ public class OssController {
         }
         return json;
 //        String endpoint = "oss-cn-hangzhou.aliyuncs.com";
-//        String accessId = "LTAIGa4VIiVyq6vC";
-//        String accessKey = "afxEsYQzT5COLyWyX2XNiuXBMn5ydH";
+
 //        String bucket = "res-procheck";
 //        String dir = String.valueOf(System.currentTimeMillis());
 //        String host = "http://" + bucket + "." + endpoint;
